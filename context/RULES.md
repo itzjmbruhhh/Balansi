@@ -89,6 +89,28 @@
 - Before scaffolding, check that NativeWind v5 has reached a stable release and works with the chosen Expo SDK. `[REC]`
 - Layout, spacing, and color tokens belong in one place. `[TODO]` where (Tailwind theme config vs a shared file). Decide when `DESIGN.md` is created.
 
+## 7a. UI, Copy, and Code Quality (antislop) `[stated by owner]`
+
+- Use [antislop](https://github.com/miqdadbadjuber/anti-slop) (`miqdadbadjuber/anti-slop`) as a filter for UI, in-app copy, and code comments.
+- It is a filter, not a style guide: it prescribes no colors, fonts, or layouts. Visual direction comes from this project's own `DESIGN.md`, which antislop does not supply. A plain, sterile result means `DESIGN.md` is missing direction, not that the filter failed.
+- Load the skill that matches the task:
+
+| Task | Skill |
+|---|---|
+| Any task | `antislop` (core, always loaded) |
+| Screens and components | `antislop-ui` |
+| Layout across screen sizes, tap targets | `antislop-layoutmobile` |
+| Contrast, focus, states, accessibility | `antislop-human` |
+| Labels, empty states, errors, any in-app text | `antislop-copywriting` |
+| Comment cleanup | `antislop-code` |
+
+- Use **during** mode while building new UI and **after** mode to audit existing work. UI work ends with the Delivery Gate PASS/FAIL report. `[REC]`
+- Do not invent numbers, ratings, or placeholder claims in the UI. Finance figures shown must come from real data.
+- Conflict order: `RULES.md` for code conventions, `DESIGN.md` for visual direction, antislop for what to filter out. If they disagree, flag it instead of choosing silently.
+- Pin the installed antislop release and upgrade deliberately (`npx antislop-ai --update`). `[REC]`
+- Review the skill files before installing, since they steer the agent. `[REC]`
+- `[TODO]` Install scope (this project only or global) and which agents to install for.
+
 ## 8. Feature Organization `[RECOMMENDED]`
 
 - Organize by feature (transactions, accounts, categories, later budgets).
@@ -106,7 +128,7 @@
 ## 10. Definition of Done
 
 - [ ] Lint, type check, and tests pass.
-- [ ] No rule in sections 3 to 7 is broken.
+- [ ] No rule in sections 3 to 7a is broken.
 - [ ] Docs updated per the table below.
 
 | If the change touches... | Update |
