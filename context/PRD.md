@@ -1,138 +1,107 @@
 # Balansi: Product Requirements (PRD)
 
 > **Purpose:** what Balansi does, for whom, and how we know a feature is done.
-> **Not here:** how it is built (see `RULES.md`, `ARCHITECTURE.md`), data model (see `SCHEMA.md`), stack rationale (see `RECOMMENDED.md`).
-> **Status legend:** `MVP` = build first, `LATER` = planned, `IDEA` = not committed, `DROPPED` = decided against.
-> **Maintenance:** every feature has a stable ID (`F-xxx`). Never reuse or renumber IDs. Edit one feature block at a time so only that block needs loading. Keep this file under ~150 lines; move dropped or completed detail out instead of letting it pile up.
-> Anything marked `TODO` or `TBD` is undecided. Do not treat it as a requirement.
+> **Not here:** how it is built (`RULES.md`, `ARCHITECTURE.md`), data model (`SCHEMA.md`), stack rationale (`RECOMMENDED.md`).
+> **Status legend:** `MVP` build first, `LATER` planned, `IDEA` not committed, `DROPPED` decided against, `TBD` needs a decision.
+> **Tags:** `[stated]` the owner said it. `[proposed]` my draft, awaiting confirmation. `TODO` undecided; do not treat as a requirement.
+> **Maintenance:** stable IDs (`F-xxx`), never renumbered. Edit one feature at a time. Keep under ~200 lines.
 
 ---
 
 ## 1. Product Summary
 
-- **What:** Personal finance tracker with a separate web app and mobile app sharing one database. *(from RECOMMENDED.md)*
-- **Primary user:** the owner, personal use first. Possibly public later. *(from RECOMMENDED.md)*
-- **Core problem it solves:** TODO
-- **What success looks like:** TODO
+- **Problem:** track personal expenses (past, current, and predicted) to manage how much goes to savings, emergency funds, necessities, guilt-free purchases, and possibly investments. `[stated]`
+- **Users:** the owner, plus a couple of close friends as testers. `[stated]` Testers are assumed to have separate, private data. `[proposed]`
+- **Platform:** mobile first (Expo). Web later. `[stated]`
+- **MVP principle:** keep it simple, just track how money is spent. `[stated]`
 
-## 2. Scope
+## 2. Primary Flow `[stated]`
 
-### In scope (MVP)
-Taken from the MVP list in `RECOMMENDED.md` §9. Confirm or edit.
-- Email login (web)
-- Add transaction
-- Transaction list
-- Monthly total by category
+Login, then Dashboard (actual, expected, and past expenses), then a screen per expense category, then manual expense input. The app is fully online. The app may also track debts and urgent payments.
 
-### Planned later (`LATER`)
-Taken from the "Add later" list in `RECOMMENDED.md` §9. Order and priority TBD.
-- Mobile app
-- Budgets
-- Recurring transactions
-- Charts
-- CSV import of bank statements
-- Receipt uploads
-- Offline cache on mobile
-- Push notifications and scheduled jobs
-- AI-assisted categorization
-- Admin dashboard, analytics, desktop wrapper
+## 3. Features
 
-### Out of scope (for now)
-Taken from the "Avoid or postpone" list in `RECOMMENDED.md` §9.
-- Bank-sync integrations and payments (until a public release is decided)
+| ID | Feature | Status | Notes |
+|---|---|---|---|
+| F-001 | Sign in | MVP | Email login (per `RECOMMENDED.md`) |
+| F-002 | Accounts (where savings are held) | MVP | Bank names and balances; "how much I own" read as balances, confirm |
+| F-003 | Categories and subcategories | MVP | Generalized defaults; see 3.1 |
+| F-004 | Add expense (manual) | MVP | Online only |
+| F-005 | Category screen | MVP | Expenses per category |
+| F-006 | Dashboard | MVP | Actual, expected, past |
+| F-007 | Analytics | MVP, scope TBD | Named a core feature; MVP depth undecided |
+| F-008 | Expected expenses | TBD | Needed for the dashboard's "expected"; manual entry assumed, confirm |
+| F-009 | Debts and urgent payments | TBD | Stated as "could"; confirm if MVP |
+| F-010 | Offline use and sync | DROPPED | Decided against: the app is fully online |
+| F-011 | Allocation buckets | TBD | Savings, emergency, necessities, guilt-free, investments |
+| F-020 | AI forecasting | LATER | `[stated]` |
+| F-021 | AI trend analysis | LATER | `[stated]` |
+| F-022 | Computer vision for grocery prices | LATER | `[stated]` |
+| F-023 | Web app | LATER | `[stated]` |
 
-## 3. Platforms and Availability
+"And probably more" on the AI side is noted but not specified. `[stated]`
 
-Both apps have mostly similar capabilities; some features will exist on one platform only. *(from RECOMMENDED.md)*
+### 3.1 Default categories `[proposed]`
 
-| Feature | Web | Mobile |
-|---|---|---|
-| F-001 to F-006 | TBD | TBD |
+You asked for generalized categories and subcategories. This is a draft to edit. Whether users can add or rename them is TODO.
 
-Platform-only features: TODO
+| Category | Example subcategories |
+|---|---|
+| Housing | Rent or mortgage, utilities, internet |
+| Food | Groceries, dining out |
+| Transport | Fuel, commute, maintenance |
+| Health | Medical, medicine, insurance |
+| Education | Tuition, books, courses |
+| Personal and guilt-free | Entertainment, shopping, hobbies, subscriptions |
+| Debt payments | Loans, credit cards |
+| Other | Uncategorized |
 
-## 4. Core Concepts (domain vocabulary)
+Savings, emergency fund, and investments are shown as allocations, not expense categories (see F-011). `[proposed]`
 
-Define each term once here and reuse it everywhere. Fill in as decisions are made.
+### 3.2 Feature details
+
+Criteria are drafted only from what you stated. Everything else is TODO.
+
+**F-004 Add expense**
+- Flow: pick category and subcategory, enter amount, date, optional note, choose account (TODO whether required).
+- [ ] A saved expense appears in lists and totals right away. `[proposed]`
+- [ ] With no connection, adding an expense shows a clear error and loses nothing the user typed. `[proposed]`
+- TODO: required fields, currency, edit and delete behavior.
+
+**F-006 Dashboard**
+- [ ] Shows actual, expected, and past expenses. `[stated]`
+- TODO: time range, layout, what "expected" means numerically.
+
+**F-002 Accounts**
+- [ ] Each account has a bank name and a balance. `[stated]`
+- TODO: account types, whether balances are manual or derived from expenses.
+
+**F-009 Debts and urgent payments**
+- TODO: fields (who, amount, due date), reminders, relation to expenses.
+
+## 4. Core Concepts
 
 | Term | Meaning |
 |---|---|
-| Account | TODO (e.g. where money lives) |
-| Category | TODO |
-| Transaction | TODO |
-| Transfer | TODO. Mentioned in `RECOMMENDED.md` as a move between accounts; confirm it is a feature |
+| Actual expense | Money already spent |
+| Expected expense | Planned or upcoming spend, entered manually in the MVP (confirm) |
+| Past expense | Earlier periods' actuals (confirm how it differs from "actual") |
+| Account | A place money is held, identified by bank name |
+| Allocation bucket | TODO. Savings, emergency fund, necessities, guilt-free, investments |
 
-## 5. Features
+## 5. Non-Functional Requirements
 
-Block template (copy for each new feature):
+- Fully online. A network connection is required; offline use is out of scope. `[stated]`
+- Flexible, scalable, and performant. `[stated]` Measurable targets: TODO.
+- Use existing UI component libraries, similar to shadcn, for mobile. `[stated]` Library choice: TODO (a `RULES.md` item).
+- Free tiers only for now. (`RECOMMENDED.md`)
 
-```
-### F-xxx Name  [MVP | LATER | IDEA | DROPPED]  [Web | Mobile | Both]
-**Goal:** one sentence, the user outcome.
-**User flow:**
-1. ...
-**Rules / behavior:** edge cases, validation, defaults.
-**Acceptance criteria:**
-- [ ] Given ..., when ..., then ...
-**Out of scope:** ...
-**Open questions:** ...
-```
+## 6. Open Questions
 
-### F-001 Sign in  [MVP]  [Web]
-**Goal:** TODO
-**User flow:** TODO
-**Rules / behavior:** Email login is in the MVP list. Google sign-in is optional per `RECOMMENDED.md`. TODO: confirm.
-**Acceptance criteria:**
-- [ ] TODO
-
-### F-002 Accounts  [TBD]  [TBD]
-**Goal:** TODO
-**User flow:** TODO
-**Rules / behavior:** An `accounts` table is part of the MVP schema. No account screen is listed in the MVP; TODO: decide how accounts get created.
-**Acceptance criteria:**
-- [ ] TODO
-
-### F-003 Categories  [TBD]  [TBD]
-**Goal:** TODO
-**User flow:** TODO
-**Rules / behavior:** A `categories` table is part of the MVP schema. TODO: default categories or user-defined?
-**Acceptance criteria:**
-- [ ] TODO
-
-### F-004 Add transaction  [MVP]  [Web]
-**Goal:** TODO
-**User flow:** TODO
-**Rules / behavior:** TODO (required fields, income vs expense, currency, date defaults)
-**Acceptance criteria:**
-- [ ] TODO
-
-### F-005 Transaction list  [MVP]  [Web]
-**Goal:** TODO
-**User flow:** TODO
-**Rules / behavior:** TODO (sorting, filtering, edit and delete)
-**Acceptance criteria:**
-- [ ] TODO
-
-### F-006 Monthly total by category  [MVP]  [Web]
-**Goal:** TODO
-**User flow:** TODO
-**Rules / behavior:** TODO (month boundaries, how transfers are treated, currency handling)
-**Acceptance criteria:**
-- [ ] TODO
-
-## 6. Non-Functional Requirements
-
-Only what is already decided in `RECOMMENDED.md`; add more as needed.
-- Data syncs across phone and desktop from day one.
-- Free tiers only for now.
-- Money correctness matters (storage rules live in `RULES.md`).
-- Other (performance, privacy, accessibility, locales): TODO
-
-## 7. Open Questions
-
-Move each item into a feature block or Core Concepts once answered, then delete it here.
-- Which currencies, and is multi-currency needed in the MVP?
-- Which features are platform-specific?
-- How are accounts and categories created in the MVP?
-- Are transfers between accounts part of the MVP?
-- What is the trigger for going public, and what changes then?
+1. Currencies: single or multiple?
+2. Is "expected" entered by hand, or derived from recurring expenses?
+3. Are allocation buckets (F-011) in the MVP, and how are they defined (fixed percentages, amounts, or just labels)?
+4. Are debts and urgent payments (F-009) in the MVP?
+5. Can users add or rename categories?
+6. What does analytics show in the MVP (totals, comparisons, charts)?
+7. Does "how much I own" mean total balances, and is there anything separate from accounts?
