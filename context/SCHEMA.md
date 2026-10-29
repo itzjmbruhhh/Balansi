@@ -9,14 +9,19 @@
 
 ## 1. Entities
 
-```
-auth.users (Supabase)
-   ├── accounts      a bank account or wallet, with a purpose and a balance
-   ├── categories    category (parent_id null) or subcategory (parent_id set)
-   └── transactions  income or expense, actual or expected, in a category, optionally tied to an account
+```mermaid
+erDiagram
+    USERS ||--o{ ACCOUNTS : owns
+    USERS ||--o{ CATEGORIES : owns
+    USERS ||--o{ TRANSACTIONS : owns
+    CATEGORIES ||--o{ CATEGORIES : "parent of"
+    CATEGORIES ||--o{ TRANSACTIONS : classifies
+    ACCOUNTS |o--o{ TRANSACTIONS : "optionally tied to"
 ```
 
-Scope matches `PRD.md` F-001 to F-008, F-011, and F-012. Not modeled yet: debts and urgent payments (F-009), recurring transactions, transfers between accounts, currency conversion. Each is added by a migration when its feature starts.
+Relationships only. Columns are in section 2, so they are not repeated here.
+
+Scope matches `PRD.md` F-001 to F-008 and F-011 to F-013. Not modeled yet: debts and urgent payments (F-009), recurring transactions, transfers between accounts, currency conversion. Each is added by a migration when its feature starts.
 
 ## 2. Tables `[proposed]`
 
@@ -43,8 +48,8 @@ All tables: `id uuid` primary key, `user_id uuid` referencing `auth.users`, `cre
 |---|---|
 | `type` | `expense` or `income` |
 | `category_id` | Required; its `type` must match |
-| `account_id` | Optional (open question, `PRD.md` section 6) |
-| `kind` | `actual` or `expected` |
+| `account_id` | Optional `[stated]` |
+| `kind` | `actual` or `expected`, for both income and expenses `[stated]` |
 | `amount_minor` | Integer centavos, always greater than 0; `type` gives the direction |
 | `currency_code` | Default `PHP` |
 | `transaction_date` | Date of the transaction, or the date expected |
@@ -62,6 +67,8 @@ The table is named `transactions`, as in `RECOMMENDED.md`, because it holds both
 6. A category or account referenced by a transaction must belong to the same user. RLS alone does not guarantee this, because a foreign key check ignores RLS. Recommended fix: composite foreign keys on `(user_id, id)`. `[proposed]`
 7. A category with transactions cannot be deleted (restrict, no cascade). `[proposed]`
 8. A transaction's category must have the same `type` as the transaction. `[proposed]`
+9. Left over counts `actual` rows only. `[stated]`
+10. Months and years are derived from `transaction_date`. There is no period table. `[proposed]`
 
 ## 4. Row Level Security `[proposed]`
 
@@ -81,7 +88,6 @@ The table is named `transactions`, as in `RECOMMENDED.md`, because it holds both
 
 ## 7. Open Items
 
-- Whether `account_id` is required on a transaction (`PRD.md` section 6, question 2).
-- Whether adding a transaction ever adjusts an account balance (question 3). The draft assumes not.
-- Whether purpose changes need history (question 4). The draft assumes not.
-- Whether left over includes expected amounts, and whether expected income exists (questions 5 and 6). The draft allows `expected` on both types.
+- Whether adding a transaction ever adjusts an account balance (`PRD.md` section 6, question 2). The draft assumes not.
+- Whether purpose changes need history (question 3). The draft assumes not.
+- Whether a month is the calendar month or a pay cycle (question 4). The draft assumes the calendar month.

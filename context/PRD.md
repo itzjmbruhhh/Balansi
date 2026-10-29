@@ -31,12 +31,14 @@ Login, then Dashboard (actual, expected, and past expenses), then a screen per e
 | F-004 | Add expense (manual) | MVP | Actual expenses |
 | F-005 | Category screen | MVP | Expenses per category |
 | F-006 | Dashboard | MVP | Actual, expected, and past |
-| F-007 | Analytics | MVP | Monthly total by category; actual vs expected; left over (income minus expenses) |
-| F-008 | Expected expenses | MVP | Entered by hand; may include system-suggested categories |
+| F-007 | Analytics | MVP | Monthly total by category; actual vs expected; left over (actual income minus actual expenses) |
+| F-008 | Expected income and expenses | MVP | Entered by hand; may include system-suggested categories |
 | F-009 | Debts and urgent payments | LATER | Moved out of the MVP; to be improved later |
 | F-010 | Offline use and sync | DROPPED | The app is fully online |
 | F-011 | Allocation buckets | MVP | A purpose label on each account (see 3.2) |
-| F-012 | Add income (manual) | MVP | Used to compute what is left over |
+| F-012 | Add income (manual) | MVP | Actual or expected, like expenses |
+| F-013 | Monthly grouping | MVP | Transactions grouped by month |
+| F-014 | Yearly grouping | TBD | Long-term view by year; MVP or later |
 | F-020 | AI forecasting | LATER | `[stated]` |
 | F-021 | AI trend analysis | LATER | `[stated]` |
 | F-022 | Computer vision for grocery prices | LATER | `[stated]` |
@@ -79,20 +81,23 @@ Criteria come from what you stated; `[proposed]` items are my drafts.
 - [ ] With no connection, adding shows a clear error and loses nothing the user typed. `[proposed]`
 - TODO: edit and delete behavior.
 
-**F-008 Expected expenses**
-- Entered by hand with an amount, category, and date. No recurring expenses in the MVP. `[stated]`
+**F-008 Expected income and expenses**
+- Both income and expenses can be expected or actual, to project and plan ahead of the date. `[stated]`
+- Entered by hand with an amount, category, and date. No recurring transactions in the MVP. `[stated]`
 - The system may suggest a category. Mechanism (rule-based or AI): TODO.
-- [ ] An expected expense counts toward "expected" for its month and not toward "actual". `[proposed]`
+- [ ] An expected transaction counts toward "expected" for its month and not toward "actual". `[proposed]`
 
 **F-012 Add income**
 - Income is recorded manually with an amount in pesos, a date, an income category, and an optional note. `[stated]`
+- Income can be actual or expected, the same as expenses. `[stated]`
 - [ ] A saved income entry appears in the list and in the month's income total right away. `[proposed]`
 - TODO: recurring income (for example salary) is out of the MVP unless you say otherwise.
 
 **F-006 Dashboard and F-007 Analytics**
 - Shows actual, expected, and past expenses. `[stated]`
 - Analytics: monthly total by category, and actual vs expected for the month. `[stated]`
-- Left over: income minus expenses for the month. `[stated]` Whether expected amounts count: see open questions.
+- Left over: actual income minus actual expenses for the month. `[stated]` A projection using expected amounts comes later.
+- Transactions are grouped by month, and by year for the long term. `[stated]` The default view is the current month. `[proposed]`
 - [ ] Left over for a month equals that month's actual income minus its actual expenses. `[proposed]`
 - [ ] Totals for a month equal the sum of that month's expenses of each kind. `[proposed]`
 - TODO: layout, default month, charts.
@@ -102,12 +107,13 @@ Criteria come from what you stated; `[proposed]` items are my drafts.
 | Term | Meaning |
 |---|---|
 | Actual expense | Money already spent |
-| Expected expense | A planned or upcoming spend, entered by hand |
+| Expected | A planned or upcoming income or expense, entered by hand |
 | Past expense | An actual expense dated in an earlier period `[proposed]` |
 | Account | A bank account or wallet where money is held |
 | Account purpose | The bucket an account's money is for: savings, emergency fund, necessities, guilt-free, or investments |
 | Income | Money received, entered by hand |
-| Left over | Income minus expenses for a period |
+| Left over | Actual income minus actual expenses for a period |
+| Period | A calendar month; months roll up into years `[proposed]` |
 
 ## 5. Non-Functional Requirements
 
@@ -118,9 +124,8 @@ Criteria come from what you stated; `[proposed]` items are my drafts.
 
 ## 6. Open Questions
 
-1. How does the system suggest categories for expected expenses (rules from past entries, or AI)?
-2. Should a transaction require an account, or is it optional?
-3. Should adding a transaction (income or expense) ever adjust an account balance, or stay fully manual?
-4. Can an account's purpose change over time, and do totals by purpose need history?
-5. Does left over use actual amounts only, or can it include expected income and expenses as a projection?
-6. Is expected income a thing in the MVP, or only actual income?
+1. How does the system suggest categories for expected transactions (rules from past entries, or AI)?
+2. Should adding a transaction ever adjust an account balance, or stay fully manual?
+3. Can an account's purpose change over time, and do totals by purpose need history?
+4. Is a month the calendar month, or does it follow a pay cycle?
+5. Is the yearly view (F-014) in the MVP or later?
