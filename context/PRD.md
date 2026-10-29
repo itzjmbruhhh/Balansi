@@ -3,7 +3,7 @@
 > **Purpose:** what Balansi does, for whom, and how we know a feature is done.
 > **Not here:** how it is built (`RULES.md`, `ARCHITECTURE.md`), data model (`SCHEMA.md`), stack rationale (`RECOMMENDED.md`).
 > **Status legend:** `MVP` build first, `LATER` planned, `IDEA` not committed, `DROPPED` decided against, `TBD` needs a decision.
-> **Tags:** `[stated]` the owner said it. `[proposed]` my draft, awaiting confirmation. `TODO` undecided; do not treat as a requirement.
+> **Tags:** `[stated]` the owner said or confirmed it. `[proposed]` my draft, awaiting confirmation. `TODO` undecided; do not treat as a requirement.
 > **Maintenance:** stable IDs (`F-xxx`), never renumbered. Edit one feature at a time. Keep under ~200 lines.
 
 ---
@@ -11,39 +11,43 @@
 ## 1. Product Summary
 
 - **Problem:** track personal expenses (past, current, and predicted) to manage how much goes to savings, emergency funds, necessities, guilt-free purchases, and possibly investments. `[stated]`
-- **Users:** the owner, plus a couple of close friends as testers. `[stated]` Testers are assumed to have separate, private data. `[proposed]`
+- **Users:** the owner, plus a couple of close friends as testers. `[stated]` Testers have separate, private data. `[proposed]`
 - **Platform:** mobile first (Expo). Web later. `[stated]`
+- **Connectivity:** fully online. No offline support. `[stated]`
+- **Currency:** pesos only. Conversion to other currencies is a possible future addition. `[stated]`
 - **MVP principle:** keep it simple, just track how money is spent. `[stated]`
 
 ## 2. Primary Flow `[stated]`
 
-Login, then Dashboard (actual, expected, and past expenses), then a screen per expense category, then manual expense input. The app is fully online. The app may also track debts and urgent payments.
+Login, then Dashboard (actual, expected, and past expenses), then a screen per expense category, then manual expense input.
 
 ## 3. Features
 
 | ID | Feature | Status | Notes |
 |---|---|---|---|
 | F-001 | Sign in | MVP | Email login (per `RECOMMENDED.md`) |
-| F-002 | Accounts (where savings are held) | MVP | Bank names and balances; "how much I own" read as balances, confirm |
-| F-003 | Categories and subcategories | MVP | Generalized defaults; see 3.1 |
-| F-004 | Add expense (manual) | MVP | Online only |
+| F-002 | Accounts (bank accounts and wallets) | MVP | Name, balance, and purpose label; balance entered by hand |
+| F-003 | Categories and subcategories | MVP | Defaults copied to each user at signup; editable |
+| F-004 | Add expense (manual) | MVP | Actual expenses |
 | F-005 | Category screen | MVP | Expenses per category |
-| F-006 | Dashboard | MVP | Actual, expected, past |
-| F-007 | Analytics | MVP, scope TBD | Named a core feature; MVP depth undecided |
-| F-008 | Expected expenses | TBD | Needed for the dashboard's "expected"; manual entry assumed, confirm |
-| F-009 | Debts and urgent payments | TBD | Stated as "could"; confirm if MVP |
-| F-010 | Offline use and sync | DROPPED | Decided against: the app is fully online |
-| F-011 | Allocation buckets | TBD | Savings, emergency, necessities, guilt-free, investments |
+| F-006 | Dashboard | MVP | Actual, expected, and past |
+| F-007 | Analytics | MVP | Monthly total by category; actual vs expected; left over (income minus expenses) |
+| F-008 | Expected expenses | MVP | Entered by hand; may include system-suggested categories |
+| F-009 | Debts and urgent payments | LATER | Moved out of the MVP; to be improved later |
+| F-010 | Offline use and sync | DROPPED | The app is fully online |
+| F-011 | Allocation buckets | MVP | A purpose label on each account (see 3.2) |
+| F-012 | Add income (manual) | MVP | Used to compute what is left over |
 | F-020 | AI forecasting | LATER | `[stated]` |
 | F-021 | AI trend analysis | LATER | `[stated]` |
 | F-022 | Computer vision for grocery prices | LATER | `[stated]` |
 | F-023 | Web app | LATER | `[stated]` |
+| F-024 | Currency conversion | LATER | Pesos only for now `[stated]` |
 
 "And probably more" on the AI side is noted but not specified. `[stated]`
 
 ### 3.1 Default categories `[proposed]`
 
-You asked for generalized categories and subcategories. This is a draft to edit. Whether users can add or rename them is TODO.
+A draft to edit. Savings, emergency fund, and investments are not expense categories; they are account purposes (F-011).
 
 | Category | Example subcategories |
 |---|---|
@@ -56,52 +60,67 @@ You asked for generalized categories and subcategories. This is a draft to edit.
 | Debt payments | Loans, credit cards |
 | Other | Uncategorized |
 
-Savings, emergency fund, and investments are shown as allocations, not expense categories (see F-011). `[proposed]`
+Income categories `[proposed]`: Salary, Side income, Other income.
 
 ### 3.2 Feature details
 
-Criteria are drafted only from what you stated. Everything else is TODO.
+Criteria come from what you stated; `[proposed]` items are my drafts.
+
+**F-002 Accounts and F-011 Allocation buckets**
+- Each account is a bank account or a wallet, with a name, a balance, and a purpose. `[stated]`
+- Purpose is one of: savings, emergency fund, necessities, guilt-free, investments. `[stated]`
+- "How much I own" is the sum of account balances, shown per account. `[stated]`
+- Balances are entered and edited by hand. Expenses do not change them automatically. `[proposed]`
+- [ ] Adding an account with a name, purpose, and balance shows it in the account list and the total. `[proposed]`
 
 **F-004 Add expense**
-- Flow: pick category and subcategory, enter amount, date, optional note, choose account (TODO whether required).
+- Flow: pick category and subcategory, enter amount in pesos, date, optional note, optionally an account. `[proposed]`
 - [ ] A saved expense appears in lists and totals right away. `[proposed]`
-- [ ] With no connection, adding an expense shows a clear error and loses nothing the user typed. `[proposed]`
-- TODO: required fields, currency, edit and delete behavior.
+- [ ] With no connection, adding shows a clear error and loses nothing the user typed. `[proposed]`
+- TODO: edit and delete behavior.
 
-**F-006 Dashboard**
-- [ ] Shows actual, expected, and past expenses. `[stated]`
-- TODO: time range, layout, what "expected" means numerically.
+**F-008 Expected expenses**
+- Entered by hand with an amount, category, and date. No recurring expenses in the MVP. `[stated]`
+- The system may suggest a category. Mechanism (rule-based or AI): TODO.
+- [ ] An expected expense counts toward "expected" for its month and not toward "actual". `[proposed]`
 
-**F-002 Accounts**
-- [ ] Each account has a bank name and a balance. `[stated]`
-- TODO: account types, whether balances are manual or derived from expenses.
+**F-012 Add income**
+- Income is recorded manually with an amount in pesos, a date, an income category, and an optional note. `[stated]`
+- [ ] A saved income entry appears in the list and in the month's income total right away. `[proposed]`
+- TODO: recurring income (for example salary) is out of the MVP unless you say otherwise.
 
-**F-009 Debts and urgent payments**
-- TODO: fields (who, amount, due date), reminders, relation to expenses.
+**F-006 Dashboard and F-007 Analytics**
+- Shows actual, expected, and past expenses. `[stated]`
+- Analytics: monthly total by category, and actual vs expected for the month. `[stated]`
+- Left over: income minus expenses for the month. `[stated]` Whether expected amounts count: see open questions.
+- [ ] Left over for a month equals that month's actual income minus its actual expenses. `[proposed]`
+- [ ] Totals for a month equal the sum of that month's expenses of each kind. `[proposed]`
+- TODO: layout, default month, charts.
 
 ## 4. Core Concepts
 
 | Term | Meaning |
 |---|---|
 | Actual expense | Money already spent |
-| Expected expense | Planned or upcoming spend, entered manually in the MVP (confirm) |
-| Past expense | Earlier periods' actuals (confirm how it differs from "actual") |
-| Account | A place money is held, identified by bank name |
-| Allocation bucket | TODO. Savings, emergency fund, necessities, guilt-free, investments |
+| Expected expense | A planned or upcoming spend, entered by hand |
+| Past expense | An actual expense dated in an earlier period `[proposed]` |
+| Account | A bank account or wallet where money is held |
+| Account purpose | The bucket an account's money is for: savings, emergency fund, necessities, guilt-free, or investments |
+| Income | Money received, entered by hand |
+| Left over | Income minus expenses for a period |
 
 ## 5. Non-Functional Requirements
 
-- Fully online. A network connection is required; offline use is out of scope. `[stated]`
+- Fully online. A connection is required. `[stated]`
 - Flexible, scalable, and performant. `[stated]` Measurable targets: TODO.
 - Use existing UI component libraries, similar to shadcn, for mobile. `[stated]` Library choice: TODO (a `RULES.md` item).
 - Free tiers only for now. (`RECOMMENDED.md`)
 
 ## 6. Open Questions
 
-1. Currencies: single or multiple?
-2. Is "expected" entered by hand, or derived from recurring expenses?
-3. Are allocation buckets (F-011) in the MVP, and how are they defined (fixed percentages, amounts, or just labels)?
-4. Are debts and urgent payments (F-009) in the MVP?
-5. Can users add or rename categories?
-6. What does analytics show in the MVP (totals, comparisons, charts)?
-7. Does "how much I own" mean total balances, and is there anything separate from accounts?
+1. How does the system suggest categories for expected expenses (rules from past entries, or AI)?
+2. Should a transaction require an account, or is it optional?
+3. Should adding a transaction (income or expense) ever adjust an account balance, or stay fully manual?
+4. Can an account's purpose change over time, and do totals by purpose need history?
+5. Does left over use actual amounts only, or can it include expected income and expenses as a projection?
+6. Is expected income a thing in the MVP, or only actual income?
