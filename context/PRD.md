@@ -44,6 +44,7 @@ Login, then Dashboard (actual, expected, and past expenses), then a screen per e
 | F-022 | Computer vision for grocery prices | LATER | `[stated]` |
 | F-023 | Web app | LATER | `[stated]` |
 | F-024 | Currency conversion | LATER | Pesos only for now `[stated]` |
+| F-025 | Calendar deadlines | LATER | Deadlines on specific days `[stated]` |
 
 "And probably more" on the AI side is noted but not specified. `[stated]`
 
@@ -76,7 +77,7 @@ Criteria come from what you stated; `[proposed]` items are my drafts.
 - [ ] Adding an account with a name, purpose, and balance shows it in the account list and the total. `[proposed]`
 
 **F-004 Add expense**
-- Flow: pick category and subcategory, enter amount in pesos, date, optional note, optionally an account. `[proposed]`
+- Flow: pick category and subcategory, enter amount in pesos, month (the day defaults to today and is not important), optional note, optionally an account. `[proposed]`
 - [ ] A saved expense appears in lists and totals right away. `[proposed]`
 - [ ] With no connection, adding shows a clear error and loses nothing the user typed. `[proposed]`
 - TODO: edit and delete behavior.
@@ -98,6 +99,7 @@ Criteria come from what you stated; `[proposed]` items are my drafts.
 - Analytics: monthly total by category, and actual vs expected for the month. `[stated]`
 - Left over: actual income minus actual expenses for the month. `[stated]` A projection using expected amounts comes later.
 - Transactions are grouped by month, and by year for the long term. `[stated]` The default view is the current month. `[proposed]`
+- Exact days do not matter much; the app tracks generalized monthly totals. `[stated]`
 - [ ] Left over for a month equals that month's actual income minus its actual expenses. `[proposed]`
 - [ ] Totals for a month equal the sum of that month's expenses of each kind. `[proposed]`
 - TODO: layout, default month, charts.
@@ -113,7 +115,7 @@ Criteria come from what you stated; `[proposed]` items are my drafts.
 | Account purpose | The bucket an account's money is for: savings, emergency fund, necessities, guilt-free, or investments |
 | Income | Money received, entered by hand |
 | Left over | Actual income minus actual expenses for a period |
-| Period | A calendar month; months roll up into years `[proposed]` |
+| Period | A calendar month; months roll up into years `[stated]` |
 
 ## 5. Non-Functional Requirements
 
@@ -127,5 +129,4 @@ Criteria come from what you stated; `[proposed]` items are my drafts.
 1. How does the system suggest categories for expected transactions (rules from past entries, or AI)?
 2. Should adding a transaction ever adjust an account balance, or stay fully manual?
 3. Can an account's purpose change over time, and do totals by purpose need history?
-4. Is a month the calendar month, or does it follow a pay cycle?
-5. Is the yearly view (F-014) in the MVP or later?
+4. Is the yearly view (F-014) in the MVP or later?

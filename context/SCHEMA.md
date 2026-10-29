@@ -52,7 +52,7 @@ All tables: `id uuid` primary key, `user_id uuid` referencing `auth.users`, `cre
 | `kind` | `actual` or `expected`, for both income and expenses `[stated]` |
 | `amount_minor` | Integer centavos, always greater than 0; `type` gives the direction |
 | `currency_code` | Default `PHP` |
-| `transaction_date` | Date of the transaction, or the date expected |
+| `transaction_date` | Date of the transaction, or the date expected. Reports use only the month; the UI does not ask for a precise day |
 | `note` | Optional |
 
 The table is named `transactions`, as in `RECOMMENDED.md`, because it holds both income and expenses.
@@ -68,7 +68,8 @@ The table is named `transactions`, as in `RECOMMENDED.md`, because it holds both
 7. A category with transactions cannot be deleted (restrict, no cascade). `[proposed]`
 8. A transaction's category must have the same `type` as the transaction. `[proposed]`
 9. Left over counts `actual` rows only. `[stated]`
-10. Months and years are derived from `transaction_date`. There is no period table. `[proposed]`
+10. Months and years are derived from `transaction_date`. There is no period table. A month is the calendar month. `[stated]`
+11. Calendar deadlines (`PRD.md` F-025) will be added later as a separate nullable `due_date` column or table, not by overloading `transaction_date`. `[proposed]`
 
 ## 4. Row Level Security `[proposed]`
 
@@ -90,4 +91,3 @@ The table is named `transactions`, as in `RECOMMENDED.md`, because it holds both
 
 - Whether adding a transaction ever adjusts an account balance (`PRD.md` section 6, question 2). The draft assumes not.
 - Whether purpose changes need history (question 3). The draft assumes not.
-- Whether a month is the calendar month or a pay cycle (question 4). The draft assumes the calendar month.
