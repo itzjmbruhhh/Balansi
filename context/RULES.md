@@ -86,7 +86,7 @@
 - **Fallback: React Native `StyleSheet`**, used if NativeWind v5 cannot do something needed, is unstable in the monorepo, or is abandoned. `[stated by owner]`
 - Do not mix both approaches within one component. Pick one per component.
 - Pin NativeWind and its peer dependencies (Tailwind, react-native-css, Reanimated) to exact versions and upgrade them deliberately. `[REC]`
-- Before scaffolding, check that NativeWind v5 has reached a stable release and works with the chosen Expo SDK. `[REC]`
+- Decision: use NativeWind v5 (release candidate) from the start, accepting pre-release risk, to avoid a later v4-to-v5 migration. `[stated by owner]` Install the exact RC pair from the NativeWind v5 docs, and check generated Expo package versions against the version the docs list as tested. `[REC]`
 - Layout, spacing, and color tokens belong in one place. `[TODO]` where (Tailwind theme config vs a shared file). Decide when `DESIGN.md` is created.
 
 ## 7a. UI, Copy, and Code Quality (antislop) `[stated by owner]`
