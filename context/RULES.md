@@ -15,7 +15,7 @@
 | How is code written? | `RULES.md` | this file |
 | What does the data look like? | `SCHEMA.md` until migrations exist, then `supabase/migrations/` | draft exists |
 | How is it put together? | `ARCHITECTURE.md` | not yet created |
-| How does it look? | `DESIGN.md` | not yet created |
+| How does it look? | `DESIGN.md` | draft exists |
 | Why this stack? | `RECOMMENDED.md` (rationale only) | exists |
 
 **Conflict order:**
@@ -87,7 +87,7 @@
 - Do not mix both approaches within one component. Pick one per component.
 - Pin NativeWind and its peer dependencies (Tailwind, react-native-css, Reanimated) to exact versions and upgrade them deliberately. `[REC]`
 - Decision: use NativeWind v5 (release candidate) from the start, accepting pre-release risk, to avoid a later v4-to-v5 migration. `[stated by owner]` Install the exact RC pair from the NativeWind v5 docs, and check generated Expo package versions against the version the docs list as tested. `[REC]`
-- Layout, spacing, and color tokens belong in one place. `[TODO]` where (Tailwind theme config vs a shared file). Decide when `DESIGN.md` is created.
+- Layout, spacing, and color tokens live in one place: `apps/mobile/global.css` (Tailwind v4 theme variables), named in `DESIGN.md`. `[REC]`
 
 ## 7a. UI, Copy, and Code Quality (antislop) `[stated by owner]`
 
@@ -143,6 +143,5 @@
 ## 11. Open Decisions
 
 - Naming conventions (files, hooks, repositories)
-- Where design tokens live
 - ESLint and Prettier rule set
 - Root `AGENTS.md` and `CLAUDE.md` index files for Codex and Claude Code, and how they share one set of instructions
