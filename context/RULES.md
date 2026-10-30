@@ -93,7 +93,7 @@
 
 - Use [antislop](https://github.com/miqdadbadjuber/anti-slop) (`miqdadbadjuber/anti-slop`) as a filter for UI, in-app copy, and code comments.
 - It is a filter, not a style guide: it prescribes no colors, fonts, or layouts. Visual direction comes from this project's own `DESIGN.md`, which antislop does not supply. A plain, sterile result means `DESIGN.md` is missing direction, not that the filter failed.
-- Load the skill that matches the task:
+- Load the skill that matches the task. With the single-file install (see below) only the core is available, and it applies to every task:
 
 | Task | Skill |
 |---|---|
@@ -109,7 +109,8 @@
 - Conflict order: `RULES.md` for code conventions, `DESIGN.md` for visual direction, antislop for what to filter out. If they disagree, flag it instead of choosing silently.
 - Pin the installed antislop release and upgrade deliberately (`npx antislop-ai --update`). `[REC]`
 - Review the skill files before installing, since they steer the agent. `[REC]`
-- `[TODO]` Install scope (this project only or global) and which agents to install for.
+- Install: the single file `antislop.md` (v3.2.22 when downloaded, 2026-10-30), stored in `context/` and added to the claude.ai Project knowledge. No coding agent is installed. If you adopt one (Claude Code, Cursor, and others), run `npx antislop-ai` and re-read this section. `[REC]`
+- Never run `npx antislop`: that npm name is a different package. The correct one is `antislop-ai`. `[REC]`
 
 ## 8. Feature Organization `[RECOMMENDED]`
 
