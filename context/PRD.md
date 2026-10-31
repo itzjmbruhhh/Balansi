@@ -25,7 +25,7 @@ Login, then Dashboard (actual, expected, and past expenses), then a screen per e
 
 | ID | Feature | Status | Notes |
 |---|---|---|---|
-| F-001 | Sign in | MVP | Email login (per `RECOMMENDED.md`) |
+| F-001 | Sign in | MVP | Email login via Clerk (`RULES.md` 7b) |
 | F-002 | Accounts (bank accounts and wallets) | MVP | Name, balance, and purpose label; balance entered by hand |
 | F-003 | Categories and subcategories | MVP | Defaults copied to each user at signup; editable |
 | F-004 | Add expense (manual) | MVP | Actual expenses |

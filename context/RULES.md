@@ -3,7 +3,7 @@
 > **Purpose:** how code is written in this repo. Applies to every task.
 > **Not here:** what the product does (`PRD.md`), data model (`SCHEMA.md`), system design (`ARCHITECTURE.md`), stack rationale (`RECOMMENDED.md`).
 > **Source tags:** `[RECOMMENDED]` = decided in `RECOMMENDED.md`. `[PREF]` = the owner's stated coding preferences. `[REC]` = recommendation, change freely. `[TODO]` = undecided.
-> **Size:** keep under ~150 lines. One line per rule. Link instead of copying.
+> **Size:** keep under ~200 lines. One line per rule. Link instead of copying.
 
 ---
 
@@ -112,6 +112,35 @@
 - Install: run `npx antislop-ai` from the repo root, scope this project only, agents Claude Code and Codex, all six skills. Commit the result so both agents share one pinned version (v3.2.22 when checked, 2026-10-30). For claude.ai, also add the single file `antislop.md` (core only) to the Project knowledge. `[REC]`
 - Never run `npx antislop`: that npm name is a different package. The correct one is `antislop-ai`. `[REC]`
 
+## 7b. Services `[stated by owner]`
+
+Free tiers only (section 3, rule 8). Check each service's current limits before adopting it, and ask before paying for anything.
+
+**EAS (builds and store publishing)**
+- Use EAS Build for development and release builds, and EAS Submit for the App Store and Play Store if the app is published.
+- Run the CLI as `npx eas-cli@latest <command>`, per `apps/mobile/AGENTS.md`.
+- Keep `development`, `preview`, and `production` profiles in `eas.json`, with a separate app ID for development builds. `[REC]`
+- `[TODO]` Store developer accounts and their fees. Check before publishing.
+
+**Clerk (auth, possibly billing)**
+- Clerk replaces Supabase Auth from `RECOMMENDED.md`. Add it to Supabase as a third-party auth provider and pass the Clerk session token to the Supabase client.
+- `user_id` columns are `text` holding the Clerk user ID. RLS policies compare it with `(select auth.jwt()->>'sub')`. The integration does not sync user records into Supabase.
+- Expo packages: `@clerk/expo` and `expo-secure-store`. The publishable key goes in `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`. Clerk secret keys stay server-side.
+- Use the JavaScript or hosted sign-in flow while developing in Expo Go. Native components and native Google or Apple sign-in need a development build. `[REC]`
+- Billing is not in the MVP. Before adopting Clerk Billing, check its cost (0.7% per transaction plus Stripe fees), that its `PricingTable` is web-only in Expo, and whether Apple and Google require their own in-app purchase systems for digital subscriptions. `[TODO]`
+- `[TODO]` Default categories can no longer be seeded by a trigger on `auth.users`. Choose a mechanism (a function called on first sign-in, or a Clerk webhook to an Edge Function) and update `SCHEMA.md`, which still assumes Supabase Auth.
+
+**CodeRabbit (code review)**
+- Use CodeRabbit for pull request reviews. Its comments are suggestions; `RULES.md` and `pnpm check` stay authoritative.
+- Confirm pricing on its pricing page before relying on it. Its docs list a free plan with PR summaries on private repos and paid plans for private-repo reviews, and other sources disagree. Paying needs the owner's approval.
+- `[TODO]` Add a `.coderabbit.yaml` so reviews follow `RULES.md` (verify the supported options in its docs).
+
+**PostHog (analytics)**
+- Use `posthog-react-native`, installed with `npx expo install posthog-react-native expo-file-system expo-application expo-device expo-localization`. Keys go in `EXPO_PUBLIC_POSTHOG_API_KEY` and `EXPO_PUBLIC_POSTHOG_HOST`.
+- Never send money amounts, account or bank names, notes, or emails in events. Send event names and non-financial properties only. `[REC]`
+- Do not send events from local development builds. `[REC]`
+- `[TODO]` Choose the PostHog region (US or EU), and decide whether a privacy policy is needed before store release.
+
 ## 8. Feature Organization `[RECOMMENDED]`
 
 - Organize by feature (transactions, accounts, categories, later budgets).
@@ -129,7 +158,7 @@
 ## 10. Definition of Done
 
 - [ ] Lint, type check, and tests pass.
-- [ ] No rule in sections 3 to 7a is broken.
+- [ ] No rule in sections 3 to 7b is broken.
 - [ ] Docs updated per the table below.
 
 | If the change touches... | Update |
@@ -145,3 +174,7 @@
 - Naming conventions (files, hooks, repositories)
 - ESLint and Prettier rule set
 - Root `AGENTS.md` and `CLAUDE.md` index files for Codex and Claude Code, and how they share one set of instructions
+- How default categories are seeded with Clerk (7b)
+- Clerk Billing vs app-store in-app purchases (7b)
+- PostHog region and privacy policy (7b)
+- CodeRabbit plan (7b)
