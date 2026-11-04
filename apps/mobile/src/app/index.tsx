@@ -3,7 +3,7 @@ import { Text, View, StyleSheet } from "react-native";
 export default function Index() {
   return (
     <View style={styles.container} className="flex-1 items-center justify-center bg-white">
-      <Text>Edit src/app/index.tsx to edit this screen.</Text>
+      <Text>Balansi</Text>
     </View>
   );
 }
