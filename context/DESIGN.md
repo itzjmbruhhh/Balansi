@@ -1,87 +1,61 @@
-# Balansi: Design Direction
+# Balansi: Design Context
 
-> **Purpose:** how Balansi looks and behaves in the UI. Direction for screens, tokens, copy tone, and motion.
-> **Not here:** product behavior (`PRD.md`), code conventions (`RULES.md`).
-> **Reference:** `DESIGNS/DESIGN.md` is the Acorns (iOS) design system this direction borrows from. Values (colors, type scale, spacing, radii) live there and are not copied here. Once tokens exist in `apps/mobile/global.css`, the code wins for exact values.
-> **Tags:** `[stated]` the owner said it. `[proposed]` my draft. `TODO` undecided.
-> **Filter:** antislop filters generic output (`RULES.md` 7a). This file supplies the direction it needs.
-> **Size:** keep under ~150 lines.
+> **Purpose:** explain how the generated design documents in `DESIGNS/` relate to the product direction, what changed during adaptation, and which decisions remain open.
+> **Authority:** `PRD.md` and `RULES.md` define product behavior and implementation constraints. The documents in `DESIGNS/` are working design specifications, not replacements for them. Once implemented, `apps/mobile/global.css` is authoritative for token values.
 
----
+## Document map
 
-## 1. Direction
+The generated CursorAI design files now live in `context/DESIGNS/`:
 
-- Keep the Acorns palette as it is for now: Oak purple for brand and structure, Acorn Green for action and positive signals, warm lilac-white canvas, deep aubergine dark mode. `[stated]` See `DESIGNS/DESIGN.md` section 2.
-- Keep the visual language: rounded humanist type (Nunito Sans), big tabular numbers, pill buttons, calm flat surfaces with color only where it carries meaning, light and dark modes. `[proposed]`
-- Do not copy Acorns' identity. Replace Round-Ups and Found Money, the acorn and oak motifs, and investing wording. Balansi needs its own name, logo, and icon. `[proposed]`
-- Pesos, not dollars: use the peso sign and no `$` anywhere. `[stated]` (`PRD.md`)
-
-## 2. What carries over from the reference
-
-| Acorns element | Balansi use `[proposed]` |
+| File | Use |
 |---|---|
-| Portfolio total | Total owned: the sum of account balances (F-002) |
-| All-time gain line | Left over for the month, green with ▲ when positive, red with ▼ when negative |
-| Allocation donut and legend | Balances split by account purpose (F-011) |
-| Round-Ups card (purple gradient) | Month summary card: actual vs expected (F-007) |
-| Found Money feed | Recent transactions list; income shown with a green "+" |
-| Amount entry (large centered number) | Add-transaction amount input |
-| Bottom tab bar, green active state | Tabs for Balansi's own screens (section 3) |
+| [`DESIGNS/DESIGN_BRIEF.md`](DESIGNS/DESIGN_BRIEF.md) | Short design direction and the reasons Balansi borrows selected ideas from the Acorns reference. Start here for identity, mood, scope, and open decisions. |
+| [`DESIGNS/DESIGN_TOKENS.md`](DESIGNS/DESIGN_TOKENS.md) | Proposed color, type, spacing, radius, border, shadow, motion, and money-format values. Traceable to the reference, but expressed as Balansi role tokens. |
+| [`DESIGNS/SCREEN_SPECIFICATIONS.md`](DESIGNS/SCREEN_SPECIFICATIONS.md) | Screen behavior and layout for sign-in, the dashboard and its analytics, and the add-transaction sheet. |
+| [`DESIGNS/COMPONENT_INVENTORY.md`](DESIGNS/COMPONENT_INVENTORY.md) | Component anatomy, variants, states, and interaction details used by those screens. |
+| [`DESIGNS/DESIGN.md`](DESIGNS/DESIGN.md) | The original Acorns iOS design study. It is source material, not Balansi product direction. |
 
-Not carried over: the Invest, Later, Spend, Earn, and Profile tabs, investing terms, and any figure that is not real data.
+`DESIGN-android.md`, `DESIGN-expo.md`, and `DESIGN-swiftui.md` are platform/reference notes in the same directory. They are not the generated screen specification set above.
 
-## 3. Screen Map (MVP) `[proposed]`
+## What the adaptation preserves
 
-Follows the primary flow in `PRD.md` section 2.
+The design set studies Acorns' calm, rounded, number-led dashboard and reuses its purple and green palette, type scale, spacing, radii, and selected component patterns. The palette is an owner-stated starting point; most Balansi-specific layouts and interactions are marked `[proposed]` in the detailed files so they are not mistaken for confirmed product requirements.
 
-| Screen | Feature | Contents |
-|---|---|---|
-| Sign in | F-001 | Email login |
-| Dashboard | F-006, F-007 | Month selector (current month by default), total owned, left over, month summary card, balances-by-purpose donut, category list for the month |
-| Category | F-005 | Month total for the category, subcategories, its transactions |
-| Add transaction | F-004, F-008, F-012 | Bottom sheet: amount, expense or income, actual or expected, category, month, optional account, optional note |
-| Accounts | F-002, F-011 | Accounts grouped by purpose, with balances; add and edit |
+The mapping changes the meaning of the reference components:
 
-Navigation: bottom tabs for Dashboard, Categories, Accounts, and Profile, plus an Add action reachable from every tab.
+- Portfolio total becomes **Total owned**, the sum of account balances.
+- The gain line becomes **Left over this month**, actual income minus actual expenses. Expected amounts are excluded.
+- The allocation donut represents account balances by purpose, rather than investment holdings.
+- The purple gradient summary compares actual and expected expenses for the selected month.
+- The large amount entry and bottom-sheet pattern support adding a transaction.
+- Navigation uses Balansi's proposed Dashboard, Categories, Accounts, and Profile labels.
 
-## 4. Money Display
+Acorns-specific names, investing language, `$` amounts, growth illustrations, and partner cashback content do not carry into Balansi. Use pesos. Expenses use the normal text color; green marks positive amounts and red marks a negative monthly leftover.
 
-- Peso sign prefix, thousands separators, two decimals, tabular figures. `[proposed]`
-- Format from integer centavos in one shared helper in `packages/core`, never ad hoc in screens.
-- Income uses the positive green with a "+". Expenses use the normal text color, not red, so the app stays calm. Red is for a negative left over. `[proposed]`
-- Show a clear empty state with the next action instead of a zero chart.
+## Product context and boundaries
 
-## 5. Tokens
+The current design scope is email sign-in, the dashboard (including analytics figures), and the add-transaction sheet. Analytics is part of the dashboard, not a separate destination. Category detail, account management, profile, yearly views, debts, and AI screens are not specified yet. The product tracks real spending and balances; it does not forecast, scan receipts, or convert currency.
 
-- Tokens live in `apps/mobile/global.css` as Tailwind v4 theme variables. Verify the exact syntax against the NativeWind v5 theme docs. `[proposed]`
-- Name by role, not by hue: `canvas`, `surface`, `surface-pressed`, `divider`, `text-primary`, `text-secondary`, `text-tertiary`, `brand`, `action`, `positive`, `negative`, `warning`.
-- One chart palette for purpose slices and category colors, taken from the reference's allocation palette.
-- Dark mode uses the reference's dark values. Do not use pure black or pure white. `[stated]` (follows the reference)
+The figures have distinct meanings: total owned comes from account balances; monthly leftover uses actual income and expenses only; the summary compares actual against expected expenses; category totals group monthly expenses. The purpose donut and its presentation are proposed. Do not turn these into investment or projection metrics.
 
-## 6. Copy Tone
+## How to use the generated specifications
 
-- Plain, specific, and short. State what the number is and what to do next. `[proposed]`
-- Drop the reference's motivational lines ("Your money is hard at work"). They are generic, and antislop-copywriting is likely to flag them. `[proposed]`
-- Empty states say what to add. Errors say what failed and what to try.
+1. Read `DESIGNS/DESIGN_BRIEF.md` for the adaptation and current scope.
+2. Use `DESIGNS/SCREEN_SPECIFICATIONS.md` for screen-level content, ordering, and states.
+3. Use `DESIGNS/COMPONENT_INVENTORY.md` for component-level treatment.
+4. Use `DESIGNS/DESIGN_TOKENS.md` for proposed values, checking implementation tokens once they exist.
+5. Consult `DESIGNS/DESIGN.md` only to understand the Acorns reference behind a choice.
 
-## 7. Motion and Haptics
+Respect `[stated]`, `[proposed]`, and `TODO` labels. Product requirements and implementation rules take precedence where a generated design draft conflicts with them. The generated documents intentionally preserve unresolved choices rather than silently filling them in.
 
-- Keep it light: a donut sweep on load and a number ticker on change are fine. Nothing decorative. `[proposed]`
-- Respect the system reduce-motion setting.
-- Haptics need `expo-haptics`, which is not installed. TODO: decide whether to add it.
+## Decisions still open
 
-## 8. Accessibility `[proposed]`
+- Whether light or dark is the default, or the app follows the system theme.
+- How the five account purposes map to the reference's six chart colors.
+- Whether the proposed tab map and Add entry point are approved.
+- Whether expected income appears on the dashboard.
+- Whether transaction edits/deletes are in scope and whether saving a transaction affects account balances.
+- Balansi's logo, app icon, and wordmark treatment; do not invent a symbol from the reference.
+- Font loading and chart implementation dependencies.
 
-- Dark forest text on the green; never white on bright green (reference, section 7).
-- Touch targets at least 44pt; rows at least 56pt.
-- Dynamic Type for body and numbers; labels that affect layout stay fixed.
-- The donut gets one summary label plus per-slice rows for screen readers.
-
-## 9. Open Items
-
-- Name, logo, and app icon for Balansi.
-- Font loading for Nunito Sans (`expo-font`, or a Google Fonts package).
-- Donut and chart implementation (the reference assumes `react-native-svg`, which is not installed).
-- A shadcn-style component library for mobile (`PRD.md` section 5). Not chosen yet.
-- Whether dark mode is the default or follows the system setting.
-- Whether to rename `DESIGNS/DESIGN.md` to avoid two files called `DESIGN.md`, and move the Android and SwiftUI guides out of context.
+The detailed open-item lists live in `DESIGNS/DESIGN_BRIEF.md`, `DESIGNS/SCREEN_SPECIFICATIONS.md`, and `DESIGNS/DESIGN_TOKENS.md`; update those when a decision is made, then keep this overview aligned.
