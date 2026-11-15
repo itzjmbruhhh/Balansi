@@ -2,6 +2,8 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
+    "noEmit" : true,
+    "skipDefaultLibCheck": true,
     "paths": {
       "@/*": [
         "./*"
@@ -19,6 +21,12 @@
     "**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "nativewind-env.d.ts"
+    "nativewind-env.d.ts",
+    "src"
+  ],
+  "exclude" : [
+    "node_modules",
+    "dist",
+    "build"
   ]
 }
