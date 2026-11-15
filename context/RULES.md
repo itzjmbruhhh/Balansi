@@ -88,6 +88,8 @@
 - Pin NativeWind and its peer dependencies (Tailwind, react-native-css, Reanimated) to exact versions and upgrade them deliberately. `[REC]`
 - Decision: use NativeWind v5 (release candidate) from the start, accepting pre-release risk, to avoid a later v4-to-v5 migration. `[stated by owner]` Install the exact RC pair from the NativeWind v5 docs, and check generated Expo package versions against the version the docs list as tested. `[REC]`
 - Layout, spacing, and color tokens live in one place: `apps/mobile/global.css` (Tailwind v4 theme variables), named in `DESIGN.md`. `[REC]`
+- Conditional `className` values are combined with `clsx`. A `className` with no condition stays a plain string. `[stated by owner]` Add `clsx` to `apps/mobile` only; `apps/web` gets it when it is created.
+- `[TODO]` Whether to add `tailwind-merge` (or a shared `cn` helper over both) is undecided. Add it only when conflicting Tailwind classes actually need resolving.
 
 ## 7a. UI, Copy, and Code Quality (antislop) `[stated by owner]`
 
@@ -178,3 +180,4 @@ Free tiers only (section 3, rule 8). Check each service's current limits before 
 - Clerk Billing vs app-store in-app purchases (7b)
 - PostHog region and privacy policy (7b)
 - CodeRabbit plan (7b)
+- `tailwind-merge` or a shared `cn` helper alongside `clsx` (section 7)
