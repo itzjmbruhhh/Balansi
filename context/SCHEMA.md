@@ -89,7 +89,10 @@ The table is named `transactions`, as in `RECOMMENDED.md`, because it holds both
 ## 5. Defaults and Derived Data
 
 - **Default categories:** the list lives in `PRD.md` section 3.1. Each user gets a copy once. There is no trigger on `auth.users`, because Clerk users are not rows in Supabase. `[stated]`
-- **Seeding mechanism:** TODO, undecided (`RULES.md` 7b). Options are a database function called on first sign-in, or a Clerk webhook to an Edge Function. Either one must be idempotent, so a repeated call never duplicates categories. It does not block the table migration, and it is added by its own migration.
+- **Seeding mechanism:** a server-side function that runs on the user's first entry into the app, not a Clerk webhook. `[stated]` Seeding is application data initialization, not an authentication event, and Clerk webhooks are asynchronous with no guarantee of prompt delivery, so onboarding must not wait on one. The app ensures the categories exist, then lets the user proceed.
+- **Shape:** `[proposed]` a Postgres function called through a repository in `packages/data`. It runs as the caller, so `user_id` comes from the token's `sub` claim and RLS still applies. An Edge Function is the alternative if the logic outgrows SQL.
+- **Idempotent and race-safe:** `[proposed]` a repeated or concurrent call (two devices, a retry) must never duplicate categories. Seeding therefore needs a per-user marker that the function claims atomically, not a check for "no categories yet", because a user may legitimately delete or rename every category later.
+- It is added by its own migration and does not block the table migration.
 - **Reports:** monthly totals come from a SQL view or function. A view must run with the caller's permissions so RLS still applies; verify this against current Supabase docs before relying on it.
 
 ## 6. Indexes `[proposed]`
@@ -99,6 +102,6 @@ The table is named `transactions`, as in `RECOMMENDED.md`, because it holds both
 
 ## 7. Open Items
 
-- How default categories are seeded (section 5).
+- Where the seeded-once marker lives (section 5): a small per-user table (for example `user_settings` with a `seeded_at` column) is the likely fit, but it adds a table to this schema. Undecided.
 - Whether adding a transaction ever adjusts an account balance (`PRD.md` section 6, question 2). The draft assumes not.
 - Whether purpose changes need history (question 3). The draft assumes not.
