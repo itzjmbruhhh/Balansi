@@ -17,5 +17,8 @@
         "typecheck": "pnpm -r --if-present typecheck",
         "test": "pnpm -r --if-present test",
         "check": "pnpm lint && pnpm typecheck && pnpm test"
+    },
+    "devDependencies": {
+        "supabase": "^3.1.0"
     }
 }
