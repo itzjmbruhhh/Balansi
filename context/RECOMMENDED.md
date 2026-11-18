@@ -25,7 +25,7 @@ A finance tracker with a **separate web app and mobile app**, built part-time, u
 | Backend              | **None to start.** Supabase handles it; add Edge Functions only when needed                                            |
 | Database             | PostgreSQL (hosted on Supabase)                                                                                        |
 | API                  | Supabase auto-generated API (`supabase-js`) behind your own shared repository layer                                    |
-| Authentication       | Supabase Auth (email + optional Google sign-in)                                                                        |
+| Authentication       | Clerk (mobile sign-in; third-party auth provider for Supabase)                                                         |
 | File / Media Storage | Supabase Storage (receipts, CSV imports)                                                                               |
 | Hosting / Deployment | Web: Vercel (or Netlify / Cloudflare Pages). Mobile: Expo Go while developing, EAS Build later                         |
 | Testing              | Vitest (shared logic), React Testing Library (web), Playwright (web end-to-end), React Native Testing Library (mobile) |
@@ -61,11 +61,11 @@ A finance tracker with a **separate web app and mobile app**, built part-time, u
 - _What:_ JavaScript with types.
 - _Why:_ Money code needs safety, and types shared between web and mobile keep them consistent.
 
-**Supabase (PostgreSQL + Auth + Storage + API)**
+**Supabase (PostgreSQL + Storage + API) with Clerk authentication**
 
-- _What:_ A hosted Postgres database with login, file storage, and an instant API on top.
-- _Why:_ It replaces a backend server, database, and auth system, all free at your scale.
-- _Where:_ The "back half" of both apps. Both talk to the same database.
+- _What:_ A hosted Postgres database with file storage and an instant API. Clerk handles sign-in and identity and is configured as Supabase's third-party auth provider.
+- _Why:_ Supabase provides the database and API; Clerk owns user identity. Supabase Auth is not the selected sign-in system.
+- _Where:_ The "back half" of both apps. Both use Clerk session tokens when the app integration is complete.
 
 **Row Level Security (RLS)**
 
@@ -166,12 +166,12 @@ A finance tracker with a **separate web app and mobile app**, built part-time, u
 | ------------------------------------------- | ---------- | -------------------------------------------------------------------------- |
 | Supabase hosting with another Postgres host | Easy       | Standard Postgres. Export and import.                                      |
 | Supabase API with your own backend          | Easy       | Only `packages/data` changes, and neither app's screens do.                |
-| Supabase Auth                               | Medium     | User IDs are tied to data and RLS rules. Plan the migration.               |
+| Clerk authentication                       | Medium     | User IDs are tied to data and RLS rules. Plan the migration.               |
 | Web hosting                                 | Easy       | Move the Next.js app to another host.                                      |
 | Next.js with another web framework          | Medium     | Rewrite the web UI only. Shared logic, mobile, and database are untouched. |
 | Expo with another mobile approach           | Medium     | Rewrite the mobile UI only. Same reasoning.                                |
 
-The key rule: **neither app talks to Supabase directly.** Both call shared repository functions (`transactionsRepo.list()`), and only those know about Supabase.
+The target rule: **screens do not talk to Supabase directly.** They call shared repository functions (`transactionsRepo.list()`), and only those know about Supabase. The current mobile client utility is an early setup pending the shared data layer and Clerk token wiring.
 
 **Small vs large deployments:** The same stack works from one user (you) to thousands. Postgres scales a long way. A well-indexed Postgres handles millions of rows comfortably. Moving from free to paid tiers is a plan change, not a rewrite.
 
@@ -205,7 +205,7 @@ The key rule: **neither app talks to Supabase directly.** Both call shared repos
    Repository interfaces (your own functions)
                  │  implemented by
                  ▼
-   Supabase client  ───────►  Supabase (Postgres, Auth, Storage)
+   Supabase client  ───────►  Supabase (Postgres, Storage, API)
 ```
 
 Swap the bottom layer and everything above stays the same. Swap either UI and the rest stays the same.
@@ -295,7 +295,7 @@ Start with `apps/web`, `packages/core`, `packages/data`, and `supabase/`. Create
 | Backend        | None at first (Supabase), later Edge Functions | Server-side logic                   | Almost no code to maintain             | Complex logic needs a plan          | NestJS, Fastify, FastAPI          |
 | Database       | PostgreSQL (Supabase)                          | Store users, accounts, transactions | Relational integrity, SQL reports      | Pausing on free tier, weak offline  | Firebase, Neon, PocketBase        |
 | API            | Supabase API via shared repository layer       | Connect apps to data                | Auto-generated, typed, swappable       | Tied to Supabase unless wrapped     | Custom REST/GraphQL API           |
-| Authentication | Supabase Auth                                  | Login and user identity             | Free, integrated with RLS              | Migration effort if replaced        | Firebase Auth, Clerk, Better Auth |
+| Authentication | Clerk, with Supabase third-party auth         | Login and user identity             | RLS can use verified Clerk JWT claims  | Requires token and RLS configuration | Supabase Auth, Firebase Auth, Better Auth |
 | File Storage   | Supabase Storage                               | Receipts, imports                   | Included, access rules                 | Free storage cap                    | Cloudflare R2, S3                 |
 | Hosting        | Vercel (web), EAS (mobile later)               | Serve and ship the apps             | Free tier, auto-deploy                 | Vercel Hobby is non-commercial      | Netlify, Cloudflare Pages         |
 | Shared code    | pnpm workspaces: `core` + `data`               | Reuse logic across apps             | One source of truth                    | Monorepo setup time                 | Separate repos, Nx, Turborepo     |
@@ -310,7 +310,7 @@ Start with `apps/web`, `packages/core`, `packages/data`, and `supabase/`. Create
 
 ### Recommended stack
 
-**Next.js (web) + Expo (mobile) → shared `core` and `data` packages → Supabase (Postgres, Auth, Storage)**, in a pnpm monorepo, with TanStack Query, React Hook Form, Zod, Tailwind/shadcn/ui, and GitHub Actions.
+**Next.js (web) + Expo (mobile) → shared `core` and `data` packages → Supabase (Postgres, Storage, API) with Clerk authentication**, in a pnpm monorepo, with TanStack Query, React Hook Form, Zod, Tailwind/shadcn/ui, and GitHub Actions.
 
 ### Why this fits your app
 

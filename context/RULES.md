@@ -130,7 +130,7 @@ Free tiers only (section 3, rule 8). Check each service's current limits before 
 - Expo packages: `@clerk/expo` and `expo-secure-store`. The publishable key goes in `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`. Clerk secret keys stay server-side.
 - Use the JavaScript or hosted sign-in flow while developing in Expo Go. Native components and native Google or Apple sign-in need a development build. `[REC]`
 - Billing is not in the MVP. Before adopting Clerk Billing, check its cost (0.7% per transaction plus Stripe fees), that its `PricingTable` is web-only in Expo, and whether Apple and Google require their own in-app purchase systems for digital subscriptions. `[TODO]`
-- `[TODO]` Default categories can no longer be seeded by a trigger on `auth.users`. Choose a mechanism (a function called on first sign-in, or a Clerk webhook to an Edge Function) and update `SCHEMA.md`, which still assumes Supabase Auth.
+- Default categories are seeded on the user's first app entry through an idempotent, race-safe Postgres function called by the app's repository (`SCHEMA.md` section 5). Clerk users do not have rows in Supabase's `auth.users`.
 
 **CodeRabbit (code review)**
 - Use CodeRabbit for pull request reviews. Its comments are suggestions; `RULES.md` and `pnpm check` stay authoritative.
