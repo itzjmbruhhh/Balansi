@@ -1,140 +1,148 @@
 # Balansi: Screen Specifications
 
-> **Scope:** sign-in, dashboard, the analytics figures on that dashboard, and the add-transaction sheet.
+> **Scope:** sign-in, dashboard, the analytics figures on that dashboard, the add-transaction sheet (Tier A, fully specified), and the Categories, Category detail, Accounts, and Profile screens (Tier B, low fidelity).
 > **Tokens:** `DESIGN_TOKENS.md`. **Parts:** `COMPONENT_INVENTORY.md`. **Direction:** `DESIGN_BRIEF.md`.
-> **Tags:** `[stated]` from `PRD.md`. `[proposed]` from `DESIGN.md` or a PRD draft.
-> **Out of scope:** category detail, accounts, profile, yearly view, debts, AI.
+> **Tags:** `[stated]` from `PRD.md` or approved by the owner in Phase 3. `[proposed]` my draft, not yet approved.
+> **Out of scope:** yearly view, debts, AI, edit and delete.
 
-Analytics is not a separate route in the current map. F-007 lives on the dashboard. A second analytics screen is not specified.
+Analytics is not a separate route. F-007 lives on the dashboard.
 
-Both themes use the tokens. The default theme is open.
+Both themes use the tokens. The default follows the system theme. `[stated]`
 
 ---
 
-## 1. Sign in (F-001)
+## 1. Navigation
+
+```
+(auth)/sign-in
+(tabs)/
+  index                  Dashboard
+  categories/index       Category list for the month        Tier B
+  categories/[id]        Category detail + transactions     Tier B
+  accounts/index         Accounts and balances              Tier B
+  profile                Sign out                           Tier B
+Overlays
+  add-transaction        Bottom sheet
+  account-form           Bottom sheet                       Tier B
+```
+
+Tabs: Dashboard, Categories, Accounts, Profile. Active tab is a green icon and label, with no pill behind it. The bar is solid, with no blur. `[stated]`
+
+Add is a compact primary pill floating above the tab bar. It appears on Dashboard, Categories, and Category detail, and is hidden on Accounts and Profile. It is not a fifth tab. `[stated]`
+
+## 2. Sign in (F-001)
 
 **Required.** Email sign-in through Clerk. `[stated]`
 
 **How it is built.** JavaScript or Clerk's hosted email flow while the app runs in Expo Go (`RULES.md` 7b). Google and Apple sign-in are not part of this spec.
 
-**Balansi chrome around that flow.** `[proposed]`
-
-- Canvas background, screen title "Balansi" in `type-title`, `text-primary`.
-- No generated logo.
+**Balansi chrome around that flow.**
+- Canvas background, screen title "Balansi" in `type-title`, `text-primary`. The wordmark is the word in Nunito Sans. No generated logo. `[stated]`
 - Short line under the title: what the step is (email sign-in).
 - Clerk owns the email field, the submit control, and Clerk's own errors.
-- If a Balansi-drawn button is used to open the flow, it is the primary button.
+- If a Balansi-drawn button opens the flow, it is the primary button.
 
-**States.**
-
-- Ready: the Clerk email step is on the canvas.
-- Submitting: Clerk's own progress. Do not add a second spinner on top of it.
-- Error: Clerk's message stays visible. Balansi does not replace it with a generic failure line.
-- Success: go to the dashboard.
+**States.** Ready, submitting (Clerk's own progress, no second spinner), error (Clerk's message stays visible), success (go to the dashboard).
 
 **Unspecified.** Field layout inside Clerk, password versus email code, and a custom sign-in form. Do not draw a homemade form and treat it as the spec.
 
-## 2. Dashboard (F-006, F-002, F-007, F-011)
+## 3. Dashboard (F-006, F-002, F-007, F-011)
 
-**Job.** After sign-in, show this month's actual, expected, and past spending, plus what the accounts hold. `[stated]`
+**Job.** After sign-in, show what the accounts hold now, and this month's actual, expected, and past spending. `[stated]`
 
-**Default period.** The current month. `[proposed]`
+**Two scopes.** "Now" figures do not change with the month, because balances have no history. "This month" figures follow the month control. `[stated]`
 
-**Regions, top to bottom.** This order is `[proposed]` (`DESIGN.md` section 3). The figures inside it mix stated math with that layout.
+**Regions, top to bottom.**
 
-1. **Title row.** "Dashboard" in `type-title`, left aligned. Month control on the trailing side. Changing month updates every figure on the screen.
-2. **Total owned.** Sum of account balances, `type-hero`, tabular, centered. Label in `type-meta`, `text-secondary`: "Total owned". `[stated]` that the sum is shown.
-3. **Left over.** Actual income minus actual expenses for the selected month. `[stated]` `type-delta` under the hero. Positive: `positive` and ▲. Negative: `negative` and ▼. The words "this month" use `text-secondary`. A projection that mixes in expected amounts is later, not this screen. `[stated]`
-4. **Month summary card.** Actual against expected for the month. `[stated]` for the comparison. The purple gradient card is the `[proposed]` container. Show two amounts: actual expenses and expected expenses. Income is not on this card. Left over already covers income minus expenses.
-5. **Purpose donut.** Account balances split by purpose. `[proposed]` Purposes are savings, emergency fund, necessities, guilt-free, investments. `[stated]` Colors wait on the open mapping. Center label is one line naming the chart ("By purpose") and one line with the total owned. The reference center copy ("Aggressive", "100% invested") is not used.
-6. **Legend.** One row per purpose that has a balance: chip, name, share, peso amount.
-7. **Category list.** This month's expense total per category. `[stated]` for the monthly total by category. A list, not a second chart. `[proposed]` Row shows the category name and the actual total. Expected for that category is secondary meta if it exists.
+*Now*
+1. **Title row.** "Dashboard" in `type-title`, left aligned.
+2. **Total owned.** Sum of account balances, `type-hero`, tabular, centered, with the label "Total owned" and the line "Balances as of [date]" under it.
+3. **Purpose donut.** Account balances split by purpose, centered. Center label: "By purpose" and the total owned. The reference center copy is not used.
+4. **Legend.** One row per purpose that has a balance: chip, name, share, peso amount.
 
-Past expenses are actual rows from earlier months. `[proposed]` definition in the PRD. They appear when the month control moves backward. There is no separate "Past" tab in this spec.
+*This month*
+5. **Section header.** "This month" with the month control. Default is the current month.
+6. **Left over.** Actual income minus actual expenses for the selected month. Positive: `positive-text` and ▲. Negative: `negative-text` and ▼. A projection using expected amounts is later.
+7. **Month summary card.** Solid `brand` card. Two amounts, actual expenses and expected expenses, and the gap in words. Income is not on this card.
+8. **Category list.** This month's expense total per category, with the share bar. Expected for that category is secondary meta if it exists.
 
-**Sample content.** Use the schema's shape: pesos, two decimals. Category names stay the PRD 3.1 draft until you confirm them, and the frame labels them as sample data.
+Past expenses are actual rows from earlier months. They appear when the month control moves backward. There is no separate "Past" tab.
+
+**Sample content.** Pesos, two decimals. Category names stay the PRD 3.1 draft. The Figma frames label every number "Sample data".
 
 **States.**
-
-- **Loading.** Title and month control stay. Amounts and the donut do not render fake numbers. A quiet loading line sits where the hero will be.
-- **Empty.** No accounts and no transactions. No zero donut. One line says nothing is tracked yet, and the primary button opens the add sheet. A second text button can add an account once that screen exists. Until the accounts screen is in scope, the only action is Add.
-- **Error.** The fetch failed. Say what failed and offer a retry. Keep the month control usable.
-- **Partial.** Accounts exist and this month has no transactions. Show total owned and an empty category list with the add action. The donut still shows purposes. Left over is ₱0.00 only when the month truly has zero actual income and zero actual expenses. Do not draw a zero chart.
+- **Loading.** Title and month control stay. No fake amounts. A quiet loading line sits where the hero will be.
+- **Empty.** No accounts and no transactions. No zero donut. "Nothing tracked yet. Add your first expense or income." The primary button "Add transaction" opens the sheet.
+- **Error.** "Couldn't load your figures." A "Try again" text button. The month control stays usable.
+- **Partial.** Accounts exist and this month has no transactions. Show total owned, the donut, and an empty category list with the add action. Left over is ₱0.00 only when the month truly has zero actual income and zero actual expenses.
 
 **Width.** One column on the phone. At 375pt the hero is 32pt and the donut is about 144pt. At 430pt the hero is 42pt and the donut is about 184pt. Content insets stay 18 to 22pt.
 
-## 3. Analytics figures (F-007)
+## 4. Analytics figures (F-007)
 
-These are the dashboard regions in section 2, not another page.
+These are the dashboard regions in section 3, not another page.
 
-| Figure | Rule | Status |
-|---|---|---|
-| Monthly total by category | Sum of that month's expenses in each category | `[stated]` |
-| Actual vs expected | The month summary card | `[stated]` comparison, `[proposed]` card |
-| Left over | Actual income minus actual expenses for the month | `[stated]` |
-| Total owned | Sum of hand-entered account balances | `[stated]` |
-| By purpose | Donut of those balances | `[proposed]` |
+| Figure | Question | Rule | Scope |
+|---|---|---|---|
+| Total owned | How much do I hold? | Sum of hand-entered account balances | Now |
+| By purpose | What is each peso set aside for? | Donut of those balances, positive balances only | Now |
+| Left over | Am I ahead this month? | Actual income minus actual expenses | Month |
+| Actual vs expected | Am I on plan? | Month summary card | Month |
+| Category totals | Where did it go? | Sum of that month's expenses per category | Month |
 
-Charts beyond the purpose donut are TODO in the PRD. This spec does not add bar charts, line charts, or a yearly chart.
+Rules for every figure: totals are computed, never stored. Amounts are integer centavos. No chart is drawn with no data. Donut slices keep 3:1 contrast against neighbors and are always named in the legend. Reduce-motion draws final states.
 
-Transactions group by calendar month. `[stated]` The yearly view (F-014) is TBD and has no frame here.
+Not included: line charts, bar charts, yearly charts, projections, and trends.
 
-## 4. Add transaction sheet (F-004, F-008, F-012)
+Transactions group by calendar month. `[stated]` The yearly view (F-014) is TBD and has no frame.
 
-**Pattern.** A bottom sheet, not a centered dialog. Top corners `radius-sheet` (24pt). Scrim is `scrim`. Shadow is `shadow-sheet`. `[proposed]` container. The reference sheet anatomy supplies the measurements.
+## 5. Add transaction sheet (F-004, F-008, F-012)
 
-**Open.** The Add action on the dashboard. Close by the scrim, a close control, and the system back gesture. After a successful save, the sheet closes and the dashboard figures include the new row. `[proposed]`
+**Pattern.** A tall bottom sheet, not a centered dialog. Top corners `radius-sheet` (24pt). Scrim is `scrim`. Shadow is `shadow-sheet`.
+
+**Open.** The Add pill. Close by the scrim, a close control, and the system back gesture. If an amount has been typed, closing shows the system alert "Discard this entry?". `[stated]` After a successful save, the sheet closes and the figures on the screen below include the new row.
 
 **Fields.**
 
 Stated minimum:
-
 - Amount in pesos, greater than zero.
 - Expense or income.
 - Actual or expected.
-- Category. A subcategory's type matches its parent when a subcategory is used.
-- Date. Reports use the month. The day can default to today. `[stated]` that the day is unimportant.
+- Category. A subcategory's type matches its parent when one is used.
+- Date. Reports use the month. The day defaults to today. `[stated]`
 
-Proposed additions (`PRD.md` F-004, `DESIGN.md` section 3):
+Proposed additions: subcategory, a month control instead of a calendar, an optional account, and an optional note. No repeat control. Recurring entries are out of the MVP. `[stated]`
 
-- Subcategory.
-- Month control instead of a full calendar, with the day stored as today.
-- Optional account.
-- Optional note.
-- No repeat control. Recurring entries are out of the MVP. `[stated]`
-
-**Layout inside the sheet.** `[proposed]`
-
-- Amount entry first, centered, `type-hero` or `type-amount-lg`, peso prefix at about 70% of the amount size, green caret, no input box, system number pad.
-- Then a segmented choice: Expense / Income.
-- Then Actual / Expected.
+**Layout inside the sheet.**
+- Amount entry first, centered, peso prefix at about 70% of the amount size, green caret, no input box, system number pad.
+- Then the Expense / Income choice, then Actual / Expected.
 - Then category, month, account, note.
-- Primary button full width: "Save expense" or "Save income", matching the choice. Disabled until amount and category are present.
+- Category opens an in-sheet pane with categories and subcategories and a back arrow. No second sheet is stacked. `[stated]`
+- Primary button full width: "Save expense" or "Save income". Disabled until amount and category are present.
 
 **States.**
-
 - **Editing.** Typed values stay while the sheet is open.
 - **Saving.** Primary button shows a busy state and ignores a second tap.
-- **Error.** Connection missing or save failed. Keep every typed value. Say what failed. `[proposed]` in the PRD for the offline case. The product is online-only, so this state still matters. `[stated]`
-- **Validation.** Missing amount or category: the primary button stays disabled. Do not invent extra rules.
+- **Error.** "Couldn't save. Your entry is still here." Every typed value is kept.
+- **Validation.** Missing amount or category: the button stays disabled. No extra rules.
 
 **Not on this sheet.** Transfers, balance edits, receipts, and currency conversion.
 
-## 5. Navigation chrome
+## 6. Tier B screens (low fidelity) `[stated]`
 
-`[proposed]`, included because the dashboard needs a way to open Add.
+These exist so no tab points at nothing. They are blueprints only. Detailed visual passes come later.
 
-Bottom tabs: Dashboard, Categories, Accounts, Profile. Add is a separate action reachable from the dashboard, not a fifth tab with an empty destination. Categories, Accounts, and Profile have no frames in this spec. If the tab bar is drawn with the dashboard, those three tabs are visible and labeled as later screens, not as finished pages.
+- **Categories.** Title and month control. One category row per category with the month's actual and expected totals and the share bar. Tap opens Category detail. The Add pill is visible.
+- **Category detail.** Header with the category name, the month total, and the month control. Below it, the transaction rows for that month, newest first, with a paginated list. Rows are not pressable. The Add pill is visible. Empty: "No [category] transactions this month."
+- **Accounts.** Account rows (name, purpose, balance) and a total. An "Add account" primary button opens the account form sheet. Balances are entered by hand. Empty: "No accounts yet. Add one to see what you hold."
+- **Account form sheet.** Name, kind (bank or wallet), purpose, balance. Primary button "Save account".
+- **Profile.** The signed-in email and a sign out text button.
 
-Active tab: green icon and green label. Inactive: `text-tertiary`. No tint pill behind the active icon. Bar background is `surface` in light mode and `canvas` in dark mode. Height 52pt plus the safe area. Top edge `border-hairline`.
+## 7. Still open
 
-The reference puts a 20px blur on the bar. This spec uses a solid bar.
-
-## 6. Still open
-
-- Theme default.
-- Purpose-to-chart-color map.
-- Exact center label if "By purpose" is rejected.
-- Whether expected income appears anywhere on the dashboard besides left over's exclusion of expected rows.
-- Edit and delete. No control for them until the PRD answers that TODO.
+- Whether expected income appears on the dashboard besides left over's exclusion of expected rows.
+- Edit and delete (out of this pass). No control for them until the PRD answers that TODO.
 - Whether saving a transaction changes an account balance. The schema draft says no. The dashboard must not show a balance that moved unless that decision changes.
+- Balances at zero or below, for example a credit card. The donut excludes them. Confirm this is acceptable.
+- Font loading and chart implementation dependencies.
+- Haptics.
