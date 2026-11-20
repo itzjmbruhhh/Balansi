@@ -2,7 +2,7 @@
 
 > **Purpose:** describe how Balansi's apps, shared packages, and services fit together.
 > **Not here:** product behavior (`PRD.md`), code conventions (`RULES.md`), data invariants (`SCHEMA.md`), or stack rationale (`RECOMMENDED.md`).
-> **Status:** target architecture with an early Supabase client setup. Planned components below are not implemented unless marked current.
+> **Status:** Expo app has a Clerk client-side authentication flow and an early Supabase client setup. Planned components below are not implemented unless marked current.
 > **Conflict order:** follow `RULES.md`. Record conflicts here rather than silently choosing a design.
 
 ---
@@ -10,7 +10,10 @@
 ## 1. Current System
 
 - `apps/mobile` is an Expo SDK 58, React Native, TypeScript app using Expo Router and NativeWind.
-- The app currently has a root stack and a placeholder screen. Clerk sign-in and application data access are not wired into the app yet.
+- The root Expo Router layout wraps the app in `ClerkProvider` with Clerk's Expo secure token cache. It waits for Clerk to load and routes signed-out users to `(auth)` and signed-in users to `(tabs)`.
+- `(auth)/SignIn.tsx` and `(auth)/SignUp.tsx` implement custom email/password screens. Sign-up requires a username and email verification; sign-in includes password reset and supported email, phone, TOTP, and backup-code verification steps. Shared NativeWind UI and validation live in `src/components/auth/AuthUI.tsx`.
+- The Settings tab exposes sign-out. The flow requires `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`; the app renders a setup message when it is missing.
+- Authentication screens are wired, but application data access is not. `apps/mobile/utils/supabase.ts` still creates a Supabase client with AsyncStorage-backed Supabase Auth persistence and does not forward Clerk session tokens.
 - `apps/mobile/utils/supabase.ts` creates a Supabase client from `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_KEY`, with AsyncStorage configured for Supabase Auth session persistence. It does not yet provide Clerk session tokens to Supabase.
 - The Supabase project and Clerk third-party-auth provider are configured externally by the owner; repository migrations and application-level Clerk integration are not present yet.
 - The repository is a pnpm workspace. `packages/core`, `packages/data`, `supabase/`, and `apps/web` do not exist yet.
@@ -32,9 +35,12 @@
 │       ├── package.json            # Mobile dependencies and scripts
 │       ├── global.css               # Tailwind / NativeWind entry point
 │       ├── utils/supabase.ts        # Current Supabase client setup
-│       └── src/app/
-│           ├── _layout.tsx         # Expo Router root stack
-│           └── index.tsx           # Current placeholder screen
+│       └── src/
+│           ├── app/
+│           │   ├── _layout.tsx     # Clerk provider, auth gate, and root stack
+│           │   ├── (auth)/         # Custom sign-in and sign-up screens
+│           │   └── (tabs)/         # Signed-in app screens
+│           └── components/auth/    # Shared custom auth UI and validation
 ├── context/
 │   ├── ARCHITECTURE.md             # System structure and data flow
 │   ├── DESIGN.md                   # Balansi design direction
@@ -72,12 +78,12 @@ The diagram describes the intended boundaries from `RULES.md`, `SCHEMA.md`, and 
 
 | Component | Responsibility | Status |
 |---|---|---|
-| `apps/mobile` | Screens, navigation, user interaction, and presentation state | Scaffold exists |
+| `apps/mobile` | Screens, navigation, user interaction, presentation state, and Clerk authentication | Auth flow implemented; data access remains scaffolded |
 | `apps/web` | Web UI, if and when the web platform is started | Later; absent |
 | `packages/core` | Shared types, Zod validation, money/date helpers, and domain rules; no React or Supabase imports | Planned; absent |
 | `packages/data` | Supabase client, repositories, auth adapter, and TanStack Query hooks | Planned; absent |
 | Supabase | PostgreSQL, generated API, and RLS | Project configured externally; client utility exists; migrations absent |
-| Clerk | User sign-in and identity; user records are not copied into Supabase | Documented choice and external third-party provider configured; app integration absent |
+| Clerk | User sign-in and identity; user records are not copied into Supabase | Expo provider, secure token cache, custom auth screens, route guard, and sign-out are implemented |
 
 ## 3. Request and Data Flow
 
@@ -124,7 +130,7 @@ Naming conventions for feature folders, repositories, hooks, and files are still
 ## 8. Unresolved Architecture Decisions
 
 - Whether and when to create `packages/core`, `packages/data`, and Supabase migrations; these are target boundaries, not existing packages.
-- Clerk sign-in, token cache/session integration for Expo, and the Supabase client's Clerk `accessToken` callback.
+- Supabase client's Clerk `accessToken` callback and third-party auth/RLS verification. Do not treat Supabase requests as Clerk-authenticated until this is implemented.
 - How to test RLS and the Clerk third-party auth setup in local development and CI.
 - Whether reports use SQL views or functions; preserve caller RLS in either approach and verify behavior before relying on it.
 - File storage, server-side functions, analytics region, and deployment details are not needed for the current MVP implementation and remain undecided where not specified in `RULES.md` or `PRD.md`.
