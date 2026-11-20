@@ -120,4 +120,49 @@
   --effects-shadows-card: 0px 6px 18px -10px rgba(40, 18, 70, 0.16);
   --effects-shadows-summary: 0px 10px 24px -12px rgba(74, 32, 106, 0.4);
   --effects-shadows-sheet: 0px -8px 28px 0px rgba(20, 12, 30, 0.22);
+
+  /* Light semantic theme */
+  --color-background: var(--palette-oak-50);
+  --color-surface: var(--palette-neutral-0);
+  --color-surface-secondary: var(--palette-neutral-100);
+
+  --color-primary: var(--palette-green-400);
+  --color-primary-pressed: var(--palette-green-600);
+
+  --color-foreground: var(--palette-neutral-900);
+  --color-muted-foreground: var(--palette-neutral-500);
+
+  --color-border: var(--palette-neutral-300);
+}
+
+/* Dark semantic theme */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--palette-night-900);
+    --color-surface: var(--palette-night-800);
+    --color-surface-secondary: var(--palette-night-700);
+
+    --color-primary: var(--palette-green-500);
+    --color-primary-pressed: var(--palette-green-600);
+
+    --color-foreground: var(--palette-neutral-0);
+    --color-muted-foreground: var(--palette-neutral-300);
+
+    --color-border: var(--palette-neutral-500);
+  }
+}
+
+/* NativeWind Theme tokens */
+@theme {
+  --color-background: var(--color-background);
+  --color-surface: var(--color-surface);
+  --color-surface-secondary: var(--color-surface-secondary);
+
+  --color-primary: var(--color-primary);
+  --color-primary-pressed: var(--color-primary-pressed);
+
+  --color-foreground: var(--color-foreground);
+  --color-muted-foreground: var(--color-muted-foreground);
+
+  --color-border: var(--color-border);
 }
