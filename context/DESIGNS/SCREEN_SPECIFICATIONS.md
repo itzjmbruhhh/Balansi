@@ -1,6 +1,6 @@
 # Balansi: Screen Specifications
 
-> **Scope:** sign-in, dashboard, the analytics figures on that dashboard, the add-transaction sheet (Tier A, fully specified), and the Categories, Category detail, Accounts, and Profile screens (Tier B, low fidelity).
+> **Scope:** sign-in and sign-up, dashboard, the analytics figures on that dashboard, the add-transaction sheet (Tier A, fully specified), and the Categories, Category detail, Accounts, and Profile screens (Tier B, low fidelity).
 > **Tokens:** `DESIGN_TOKENS.md`. **Parts:** `COMPONENT_INVENTORY.md`. **Direction:** `DESIGN_BRIEF.md`.
 > **Tags:** `[stated]` from `PRD.md` or approved by the owner in Phase 3. `[proposed]` my draft, not yet approved.
 > **Out of scope:** yearly view, debts, AI, edit and delete.
@@ -14,7 +14,8 @@ Both themes use the tokens. The default follows the system theme. `[stated]`
 ## 1. Navigation
 
 ```
-(auth)/sign-in
+(auth)/SignIn
+(auth)/SignUp
 (tabs)/
   index                  Dashboard
   categories/index       Category list for the month        Tier B
@@ -30,21 +31,21 @@ Tabs: Dashboard, Categories, Accounts, Profile. Active tab is a green icon and l
 
 Add is a compact primary pill floating above the tab bar. It appears on Dashboard, Categories, and Category detail, and is hidden on Accounts and Profile. It is not a fifth tab. `[stated]`
 
-## 2. Sign in (F-001)
+## 2. Sign in and account creation (F-001)
 
-**Required.** Email sign-in through Clerk. `[stated]`
+**Implemented.** Balansi owns the native UI and flow logic. Clerk provides identity, session, verification, and password-reset services. The screens use NativeWind and shared controls in `apps/mobile/src/components/auth/AuthUI.tsx`.
 
-**How it is built.** JavaScript or Clerk's hosted email flow while the app runs in Expo Go (`RULES.md` 7b). Google and Apple sign-in are not part of this spec.
+**Sign-up flow.** Collect email, username, and password twice. Username is required and validated as 4–64 characters with no spaces; Clerk enforces uniqueness and instance-specific character rules. Create the account, send an email verification code, verify it, then activate the session and route to `(tabs)`. Users can resend the code or return to edit their details.
 
-**Balansi chrome around that flow.**
-- Canvas background, screen title "Balansi" in `type-title`, `text-primary`. The wordmark is the word in Nunito Sans. No generated logo. `[stated]`
-- Short line under the title: what the step is (email sign-in).
-- Clerk owns the email field, the submit control, and Clerk's own errors.
-- If a Balansi-drawn button opens the flow, it is the primary button.
+**Sign-in flow.** Collect email and password, validate email locally, then activate the session and route to `(tabs)`. If required, the flow handles device-trust email verification and email, phone, authenticator TOTP, and backup-code MFA.
 
-**States.** Ready, submitting (Clerk's own progress, no second spinner), error (Clerk's message stays visible), success (go to the dashboard).
+**Password recovery.** The user requests an email code, verifies it, chooses and confirms a new password, and is signed in after the update. Other sessions are signed out when the password changes.
 
-**Unspecified.** Field layout inside Clerk, password versus email code, and a custom sign-in form. Do not draw a homemade form and treat it as the spec.
+**Visual treatment.** The sign-in and sign-up screens share the warm lilac canvas, Balansi wordmark, Oak and Green accents, rounded controls, and existing light/dark theme tokens. The layout scrolls with the keyboard and respects safe areas. No new artwork or decorative motion is used.
+
+**States.** Clerk initialization/loading, submitting, field validation, provider errors, email verification, MFA, password reset, and signed-in routing. A missing publishable key shows setup guidance.
+
+**Configuration.** `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY` must be set. Enable email/password, username sign-up, and email verification codes in Clerk Dashboard, plus the Native API for native requests. Sign-in uses email and password. Google/Apple OAuth and passkey MFA are not implemented.
 
 ## 3. Dashboard (F-006, F-002, F-007, F-011)
 

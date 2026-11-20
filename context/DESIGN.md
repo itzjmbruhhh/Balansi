@@ -11,7 +11,7 @@ The generated design files live in `context/DESIGNS/`:
 |---|---|
 | [`DESIGNS/DESIGN_BRIEF.md`](DESIGNS/DESIGN_BRIEF.md) | Short design direction and the reasons Balansi borrows selected ideas from the Acorns reference. Start here for identity, mood, scope, and open decisions. |
 | [`DESIGNS/DESIGN_TOKENS.md`](DESIGNS/DESIGN_TOKENS.md) | Color, type, spacing, radius, border, shadow, motion, and money-format values, expressed as Balansi role tokens. |
-| [`DESIGNS/SCREEN_SPECIFICATIONS.md`](DESIGNS/SCREEN_SPECIFICATIONS.md) | Navigation, screen behavior and layout for sign-in, the dashboard and its analytics, the add-transaction sheet, and the low-fidelity Tier B screens. |
+| [`DESIGNS/SCREEN_SPECIFICATIONS.md`](DESIGNS/SCREEN_SPECIFICATIONS.md) | Navigation, screen behavior and layout for sign-in and sign-up, the dashboard and its analytics, the add-transaction sheet, and the low-fidelity Tier B screens. |
 | [`DESIGNS/COMPONENT_INVENTORY.md`](DESIGNS/COMPONENT_INVENTORY.md) | Component anatomy, variants, states, and overlay types used by those screens. |
 | [`DESIGNS/balansi-tokens.json`](DESIGNS/balansi-tokens.json) | The same tokens as JSON in Tokens Studio format, for import into Figma Variables. Keep it in step with `DESIGN_TOKENS.md`. |
 | [`DESIGNS/DESIGN.md`](DESIGNS/DESIGN.md) | The original Acorns iOS design study. It is source material, not Balansi product direction. |
@@ -35,7 +35,7 @@ Acorns-specific names, investing language, `$` amounts, growth illustrations, an
 
 ## Product context and boundaries
 
-The design scope is email sign-in, the dashboard (including analytics figures), and the add-transaction sheet, plus low-fidelity blueprints for Categories, Category detail, Accounts, and Profile so every tab has a destination. Analytics is part of the dashboard, not a separate destination. Yearly views, debts, and AI screens are not specified. The product tracks real spending and balances; it does not forecast, scan receipts, or convert currency.
+The design scope is email sign-in and account creation with a required username at sign-up, the dashboard (including analytics figures), and the add-transaction sheet, plus low-fidelity blueprints for Categories, Category detail, Accounts, and Profile so every tab has a destination. Analytics is part of the dashboard, not a separate destination. Yearly views, debts, and AI screens are not specified. The product tracks real spending and balances; it does not forecast, scan receipts, or convert currency.
 
 The figures have distinct meanings and scopes. Total owned and the purpose donut come from account balances and show the current state, so they do not change with the month. Left over, the summary card, and category totals follow the selected month. Left over uses actual income and expenses only. Do not turn these into investment or projection metrics.
 

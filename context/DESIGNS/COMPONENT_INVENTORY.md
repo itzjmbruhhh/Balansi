@@ -33,11 +33,13 @@ One variant. States: empty (prefix and a zero or a bare caret), filled, disabled
 
 ## 3. Text field
 
-Used for note and account name. Clerk sign-in fields stay inside Clerk.
+Used for note, account name, and custom auth screens. Auth fields are shared NativeWind controls from `apps/mobile/src/components/auth/AuthUI.tsx`, not Clerk-rendered fields.
 
 Height 52pt. Fill `surface`. Radius `radius-md`. No border at rest. Focus: `border-focus`. Placeholder `text-secondary`, `type-body`. Label sits above on focus, `type-label`, `text-secondary`.
 
 States: rest, focus, disabled.
+
+Auth variant: visible label above the input; 56pt height; `surface` fill; `radius-md`; `border` at rest, with an error border and message when validation fails. Email, username, password, verification-code, and password-reset fields use the same field component. Password visibility is masked by default.
 
 ## 4. Choice group
 

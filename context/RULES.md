@@ -127,8 +127,12 @@ Free tiers only (section 3, rule 8). Check each service's current limits before 
 **Clerk (auth, possibly billing)**
 - Clerk replaces Supabase Auth from `RECOMMENDED.md`. Add it to Supabase as a third-party auth provider and pass the Clerk session token to the Supabase client.
 - `user_id` columns are `text` holding the Clerk user ID. RLS policies compare it with `(select auth.jwt()->>'sub')`. The integration does not sync user records into Supabase.
-- Expo packages: `@clerk/expo` and `expo-secure-store`. The publishable key goes in `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`. Clerk secret keys stay server-side.
-- Use the JavaScript or hosted sign-in flow while developing in Expo Go. Native components and native Google or Apple sign-in need a development build. `[REC]`
+- Expo packages already installed: `@clerk/expo` 4.x and `expo-secure-store`. The root provider uses Clerk's Expo `tokenCache`; the publishable key is `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`. Clerk secret keys stay server-side.
+- The mobile app implements custom email/password sign-up and sign-in with required usernames at sign-up, email verification, password reset, route protection, and sign-out. Sign-in remains email/password. Clerk Dashboard settings must enable email/password, username sign-up, and email verification codes. Enable Clerk's Native API for native app requests.
+- Validate usernames as required, 4–64 characters, and without spaces before submitting. Clerk remains authoritative for uniqueness and any instance-specific character restrictions.
+- Current custom MFA handling supports email code, phone code, authenticator TOTP, and backup codes. Passkey and other strategies need an explicit flow before being enabled for users.
+- Google and Apple sign-in are not implemented. Native OAuth and native Clerk components require their documented development-build configuration; confirm current Clerk docs before adding them.
+- Supabase is not yet wired to Clerk session tokens. Do not rely on the current Supabase client for Clerk-authenticated requests until its token callback and third-party auth/RLS setup are implemented and verified.
 - Billing is not in the MVP. Before adopting Clerk Billing, check its cost (0.7% per transaction plus Stripe fees), that its `PricingTable` is web-only in Expo, and whether Apple and Google require their own in-app purchase systems for digital subscriptions. `[TODO]`
 - Default categories are seeded on the user's first app entry through an idempotent, race-safe Postgres function called by the app's repository (`SCHEMA.md` section 5). Clerk users do not have rows in Supabase's `auth.users`.
 

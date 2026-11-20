@@ -1,6 +1,6 @@
 # Balansi: Design Brief
 
-> **Purpose:** the visual direction for the current scope (sign-in, dashboard, analytics figures, add-transaction sheet, and the Tier B screens at low fidelity).
+> **Purpose:** the visual direction for the current scope (sign-in and sign-up, dashboard, analytics figures, add-transaction sheet, and the Tier B screens at low fidelity).
 > **Values:** `DESIGN_TOKENS.md`. **Screens:** `SCREEN_SPECIFICATIONS.md`. **Parts:** `COMPONENT_INVENTORY.md`.
 > **Sources:** `DESIGN.md` (what Balansi keeps), `DESIGNS/DESIGN.md` (numeric reference), `PRD.md` (behavior).
 > **Tags:** `[stated]` owner-confirmed, including the Phase 3 approvals. `[proposed]` draft.
@@ -48,7 +48,7 @@ Light and dark both exist, and the app follows the system theme. `[stated]` Dark
 
 ## 6. Current scope
 
-Tier A: sign-in, the dashboard (including the analytics figures), and the add-transaction sheet. Tier B at low fidelity: Categories, Category detail, Accounts, Profile, and the account form sheet. Yearly view, debts, AI, and edit and delete are out of scope.
+Tier A: sign-in and sign-up, the dashboard (including the analytics figures), and the add-transaction sheet. Tier B at low fidelity: Categories, Category detail, Accounts, Profile, and the account form sheet. Yearly view, debts, AI, and edit and delete are out of scope.
 
 The wordmark is the word "Balansi" in Nunito Sans. A logo and app icon are not designed yet. Do not invent a symbol. `[stated]`
 
