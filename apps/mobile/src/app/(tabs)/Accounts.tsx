@@ -1,11 +1,11 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import ScreenContainer from '@/src/components/layout/ScreenContainer'
 
 const Accounts = () => {
   return (
-    <View>
-      <Text>Accounts</Text>
-    </View>
+    <ScreenContainer className="bg-background">
+      <Text className="text-foreground">Accounts</Text>
+    </ScreenContainer>
   )
 }
 
