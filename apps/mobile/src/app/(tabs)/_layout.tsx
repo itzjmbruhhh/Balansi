@@ -6,8 +6,11 @@ import { useNativeVariable } from "react-native-css/native";
 
 const TabsLayout = () => {
   const insets = useSafeAreaInsets();
-  const activeIconColor = useNativeVariable("--color-surface-secondary");
+  const activeIconColor = useNativeVariable("--color-primary");
   const inactiveIconColor = useNativeVariable("--color-muted-foreground");
+  const foregroundColor = useNativeVariable("--color-foreground");
+  const surfaceColor = useNativeVariable("--color-surface");
+  const borderColor = useNativeVariable("--color-border");
 
   const TabIcon = ({ icon: Icon, color }: TabIconProps) => {
     return (
@@ -23,17 +26,16 @@ const TabsLayout = () => {
         headerShown: false,
         animation: "none",
         tabBarShowLabel: true,
-        tabBarActiveTintColor: "#1f1a2b",
-        tabBarInactiveTintColor: "#6e6480",
+        tabBarActiveTintColor: foregroundColor,
+        tabBarInactiveTintColor: inactiveIconColor,
         tabBarStyle: {
           height: 78 + insets.bottom,
           paddingTop: 8,
           paddingBottom: Math.max(insets.bottom, 8),
           borderTopWidth: 1,
-          borderTopColor: "#6e6480",
-          borderLeftWidth: 1,
-          borderRightWidth: 1,
-          borderColor: "#6e6480",
+          backgroundColor: surfaceColor,
+          borderTopColor: borderColor,
+          borderColor,
         },
         tabBarItemStyle: {
           paddingTop: 2,
