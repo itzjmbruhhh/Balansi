@@ -1,4 +1,4 @@
-import homeFilled from '@/assets/icons/filled/ home-filled.svg';
+import homeFilled from '@/assets/icons/filled/home-filled.svg';
 import homeOutlined from '@/assets/icons/outlined/home-outlined.svg';
 import categoryFilled from '@/assets/icons/filled/category-filled.svg';
 import categoryOutlined from '@/assets/icons/outlined/category-outlined.svg';
