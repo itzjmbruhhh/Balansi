@@ -6,16 +6,14 @@ import { useNativeVariable } from "react-native-css/native";
 
 const TabsLayout = () => {
   const insets = useSafeAreaInsets();
-  const activeIconColor = useNativeVariable("--color-primary");
-  const inactiveIconColor = useNativeVariable("--color-muted-foreground");
   const foregroundColor = useNativeVariable("--color-foreground");
   const surfaceColor = useNativeVariable("--color-surface");
   const borderColor = useNativeVariable("--color-border");
 
-  const TabIcon = ({ icon: Icon, color }: TabIconProps) => {
+  const TabIcon = ({ icon: Icon }: TabIconProps) => {
     return (
       <View className="tab-icon-wrap">
-        <Icon color={color} width={32} height={32} />
+        <Icon width={32} height={32} />
       </View>
     );
   };
@@ -27,7 +25,6 @@ const TabsLayout = () => {
         animation: "none",
         tabBarShowLabel: true,
         tabBarActiveTintColor: foregroundColor,
-        tabBarInactiveTintColor: inactiveIconColor,
         tabBarStyle: {
           height: 78 + insets.bottom,
           paddingTop: 8,
@@ -78,7 +75,6 @@ const TabsLayout = () => {
             ),
             tabBarIcon: ({ focused }) => <TabIcon
               icon={focused ? tab.activeIcon ?? tab.icon : tab.icon}
-              color={focused ? activeIconColor : inactiveIconColor}
             />,
           }}
         />
