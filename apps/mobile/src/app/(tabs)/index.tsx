@@ -6,9 +6,6 @@ export default function Index() {
   return (
     <ScreenContainer className="bg-background">
       <Text className="text-foreground">Welcome to Balansi</Text>
-      <Link href="./Onboarding">
-        <Text className="text-foreground">Go to Onboarding</Text>
-      </Link>
     </ScreenContainer>
   );
 }
