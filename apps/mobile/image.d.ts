@@ -11,7 +11,10 @@ declare module "*.jpeg" {
     export default value;
 }
 declare module "*.svg" {
-    const value: any;
+    import type { ComponentType } from "react";
+    import type { SvgProps } from "react-native-svg";
+
+    const value: ComponentType<SvgProps>;
     export default value;
 }
 declare module "*.gif" {
