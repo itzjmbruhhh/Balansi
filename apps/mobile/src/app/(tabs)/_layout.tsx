@@ -53,7 +53,6 @@ const TabsLayout = () => {
           options={{
             title: tab.title,
             tabBarButton: ({
-              href,
               onPress,
               onLongPress,
               style,
@@ -64,7 +63,6 @@ const TabsLayout = () => {
               "aria-selected": selected,
             }) => (
               <Pressable
-                href={href}
                 onPress={onPress}
                 onLongPress={onLongPress}
                 style={style}
