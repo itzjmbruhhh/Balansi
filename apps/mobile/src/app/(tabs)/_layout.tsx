@@ -1,12 +1,91 @@
 import { Tabs } from "expo-router";
+import { tabs } from "@/constants/data";
+import { Pressable, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useNativeVariable } from "react-native-css/native";
 
-const TabsLayout = () => (
-  <Tabs screenOptions={{ headerShown: false }}>
-      <Tabs.Screen name="index" options={{ title: "Home" }} />
-      <Tabs.Screen name="Accounts" options={{ title: "Accounts" }} />
-      <Tabs.Screen name="Categories" options={{ title: "Categories" }} />
-      <Tabs.Screen name="Settings" options={{ title: "Settings" }} />
-  </Tabs>
-);
+const TabsLayout = () => {
+  const insets = useSafeAreaInsets();
+  const primaryColor = useNativeVariable("--color-primary");
+  const mutedColor = useNativeVariable("--color-muted-foreground");
+  const surfaceColor = useNativeVariable("--color-surface");
+  const borderColor = useNativeVariable("--color-border");
+
+  const TabIcon = ({ icon: Icon, color }: TabIconProps) => {
+    return (
+      <View className="tab-icon-wrap">
+        <Icon color={color} width={32} height={32} />
+      </View>
+    );
+  };
+
+  return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        animation: "none",
+        tabBarShowLabel: true,
+        tabBarActiveTintColor: primaryColor,
+        tabBarInactiveTintColor: mutedColor,
+        tabBarStyle: {
+          height: 78 + insets.bottom,
+          paddingTop: 8,
+          paddingBottom: Math.max(insets.bottom, 8),
+          borderTopWidth: 1,
+          backgroundColor: surfaceColor,
+          borderTopColor: borderColor,
+          borderColor,
+        },
+        tabBarItemStyle: {
+          paddingTop: 2,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          lineHeight: 16,
+          fontWeight: "700",
+          marginTop: 0,
+        },
+      }}
+    >
+      {tabs.map((tab) => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{
+            title: tab.title,
+            tabBarButton: ({
+              onPress,
+              onLongPress,
+              style,
+              children,
+              testID,
+              role,
+              "aria-label": accessibilityLabel,
+              "aria-selected": selected,
+            }) => (
+              <Pressable
+                onPress={onPress}
+                onLongPress={onLongPress}
+                style={style}
+                testID={testID}
+                role={role}
+                aria-label={accessibilityLabel}
+                aria-selected={selected}
+              >
+                {children}
+              </Pressable>
+            ),
+            tabBarIcon: ({ focused, color }) => (
+              <TabIcon
+                icon={focused ? tab.activeIcon ?? tab.icon : tab.icon}
+                color={color}
+              />
+            ),
+          }}
+        />
+      ))}
+    </Tabs>
+  );
+};
 
 export default TabsLayout;

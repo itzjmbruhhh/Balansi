@@ -166,3 +166,9 @@
 
   --color-border: var(--color-border);
 }
+
+@layer components {
+  .tab-icon-wrap {
+    @apply size-12 items-center justify-center;
+  }
+}
