@@ -1,6 +1,6 @@
 # Balansi: Screen Specifications
 
-> **Scope:** sign-in and sign-up, dashboard, the analytics figures on that dashboard, the add-transaction sheet (Tier A, fully specified), and the Categories, Category detail, Accounts, and Profile screens (Tier B, low fidelity).
+> **Scope:** sign-in and sign-up, dashboard, the analytics figures on that dashboard, the add-transaction sheet (Tier A, fully specified), and the Categories, Category detail, Accounts, and Profile screens (Tier B, low fidelity). The current app has an initial tab shell and placeholder destinations; specs below are product direction unless explicitly marked implemented.
 > **Tokens:** `DESIGN_TOKENS.md`. **Parts:** `COMPONENT_INVENTORY.md`. **Direction:** `DESIGN_BRIEF.md`.
 > **Tags:** `[stated]` from `PRD.md` or approved by the owner in Phase 3. `[proposed]` my draft, not yet approved.
 > **Out of scope:** yearly view, debts, AI, edit and delete.
@@ -27,9 +27,11 @@ Overlays
   account-form           Bottom sheet                       Tier B
 ```
 
-Tabs: Dashboard, Categories, Accounts, Profile. Active tab is a green icon and label, with no pill behind it. The bar is solid, with no blur. `[stated]`
+Current routes are Dashboard (`index`), Categories, Accounts, and Settings. The tab metadata and icon mapping live in `apps/mobile/constants/data.ts` and `constants/icons.ts`; the bar uses theme variables for active/inactive tint, surface, and border, and includes the bottom safe-area inset. Navigation SVGs have filled and outlined variants. Settings is the current destination for theme controls and sign out. Profile remains the planned product destination; it has not replaced Settings in the route tree.
 
-Add is a compact primary pill floating above the tab bar. It appears on Dashboard, Categories, and Category detail, and is hidden on Accounts and Profile. It is not a fifth tab. `[stated]`
+The Dashboard, Categories, and Accounts routes currently render placeholder labels. The onboarding route was removed, and the Dashboard no longer links to it. The current bar does not yet include the planned floating Add action.
+
+Add is a compact primary pill floating above the tab bar in the product design. It appears on Dashboard, Categories, and Category detail, and is hidden on Accounts and Profile. It is not a fifth tab. `[stated]` This control is not implemented in the current tab shell.
 
 ## 2. Sign in and account creation (F-001)
 

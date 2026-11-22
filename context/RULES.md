@@ -14,7 +14,7 @@
 | What are we building? | `PRD.md` | exists |
 | How is code written? | `RULES.md` | this file |
 | What does the data look like? | `SCHEMA.md` until migrations exist, then `supabase/migrations/` | draft exists |
-| How is it put together? | `ARCHITECTURE.md` | not yet created |
+| How is it put together? | `ARCHITECTURE.md` | current implementation and target boundaries |
 | How does it look? | `DESIGN.md` | draft exists |
 | Why this stack? | `RECOMMENDED.md` (rationale only) | exists |
 

@@ -133,11 +133,13 @@ In-sheet pane: the category and subcategory picker slides in inside the same she
 
 ## 14. Tab bar and Add pill
 
-Tab bar height 52pt plus safe area. Background `surface` light, `canvas` dark. `border-hairline` on top. Solid, no blur. Icon 22pt with a 44pt hit. Label `type-tab`, always visible.
+**Current implementation:** React Navigation tab bar height is 78pt plus the device bottom inset, with 8pt top padding and bottom padding of at least 8pt. It uses the NativeWind `surface` and `border` theme variables in both themes. SVG icons render at 32pt in a 48pt wrapper; labels are always visible at 12pt, line height 16pt, weight 700. Active and inactive colors use the theme's `primary` and `muted-foreground` variables. The bar disables tab transition animation. These are implementation values, not the final visual spec.
+
+**Product direction:** tab bar is solid with no blur, an icon and always-visible label, and no pill behind the active item. The target inventory uses a 52pt bar plus safe area, a 22pt icon with a 44pt hit area, and `type-tab`; reconcile these dimensions when the tab bar receives its visual implementation pass.
 
 Active: filled icon and label in `action-text`. Inactive: `text-tertiary`. No pill behind the active item.
 
-Tabs: Dashboard, Categories, Accounts, Profile.
+Current tabs: Dashboard, Categories, Accounts, Settings. Profile is the planned product destination; the Settings route currently owns theme controls and sign out.
 
 Add pill: primary button, compact, floating above the tab bar on the right, with `shadow-card`. Shown on Dashboard, Categories, and Category detail. Hidden on Accounts and Profile. `[stated]`
 
