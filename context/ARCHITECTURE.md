@@ -2,7 +2,7 @@
 
 > **Purpose:** describe how Balansi's apps, shared packages, and services fit together.
 > **Not here:** product behavior (`PRD.md`), code conventions (`RULES.md`), data invariants (`SCHEMA.md`), or stack rationale (`RECOMMENDED.md`).
-> **Status:** Expo app has a Clerk client-side authentication flow and an early Supabase client setup. Planned components below are not implemented unless marked current.
+> **Status:** Expo app has a Clerk client-side authentication flow, an initial signed-in tab shell, and an early Supabase client setup. Planned components below are not implemented unless marked current.
 > **Conflict order:** follow `RULES.md`. Record conflicts here rather than silently choosing a design.
 
 ---
@@ -13,6 +13,8 @@
 - The root Expo Router layout wraps the app in `ClerkProvider` with Clerk's Expo secure token cache. It waits for Clerk to load and routes signed-out users to `(auth)` and signed-in users to `(tabs)`.
 - `(auth)/SignIn.tsx` and `(auth)/SignUp.tsx` implement custom email/password screens. Sign-up requires a username and email verification; sign-in includes password reset and supported email, phone, TOTP, and backup-code verification steps. Shared NativeWind UI and validation live in `src/components/auth/AuthUI.tsx`.
 - The Settings tab exposes sign-out. The flow requires `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`; the app renders a setup message when it is missing.
+- The signed-in tab bar is generated from `apps/mobile/constants/data.ts` and uses SVG icon components mapped in `apps/mobile/constants/icons.ts`. Filled and outlined SVGs are transformed by `react-native-svg-transformer`; their configured source colors are replaced with `currentColor` so the tab tint can follow the active theme. The current destinations are Dashboard (`index`), Categories, Accounts, and Settings.
+- The tab bar reads primary, muted, surface, and border colors through `useNativeVariable`, and includes the device bottom safe-area inset. Its current implementation is an initial navigation shell; the Add action and product screens described in design specs are not implemented.
 - Authentication screens are wired, but application data access is not. `apps/mobile/utils/supabase.ts` still creates a Supabase client with AsyncStorage-backed Supabase Auth persistence and does not forward Clerk session tokens.
 - `apps/mobile/utils/supabase.ts` creates a Supabase client from `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_KEY`, with AsyncStorage configured for Supabase Auth session persistence. It does not yet provide Clerk session tokens to Supabase.
 - The Supabase project and Clerk third-party-auth provider are configured externally by the owner; repository migrations and application-level Clerk integration are not present yet.
@@ -30,16 +32,17 @@
 ├── .codex/skills/                  # Codex skill copies
 ├── apps/
 │   └── mobile/                     # Expo application
-│       ├── AGENTS.md               # Mobile-specific development rules
 │       ├── app.json                # Expo app configuration
 │       ├── package.json            # Mobile dependencies and scripts
 │       ├── global.css               # Tailwind / NativeWind entry point
+│       ├── constants/               # Tab destinations and SVG icon registry
+│       ├── assets/icons/            # Filled and outlined tab SVGs
 │       ├── utils/supabase.ts        # Current Supabase client setup
 │       └── src/
 │           ├── app/
 │           │   ├── _layout.tsx     # Clerk provider, auth gate, and root stack
 │           │   ├── (auth)/         # Custom sign-in and sign-up screens
-│           │   └── (tabs)/         # Signed-in app screens
+│           │   └── (tabs)/         # Dashboard, Categories, Accounts, Settings, and tab layout
 │           └── components/auth/    # Shared custom auth UI and validation
 ├── context/
 │   ├── ARCHITECTURE.md             # System structure and data flow
@@ -54,7 +57,7 @@
 └── pnpm-workspace.yaml             # Workspace package globs
 ```
 
-This tree lists the main source and project configuration files; it omits generated files, assets, dependencies, and editor settings. `apps/mobile/assets/` contains Expo app icons and images. The repository has no root `README.md`, `packages/`, `supabase/` migrations, or `apps/web/` at this time.
+This tree lists the main source and project configuration files; it omits generated files, dependencies, and editor settings. `apps/mobile/assets/` contains Expo app images and SVG navigation icons. The repository has no root `README.md`, `packages/`, `supabase/` migrations, or `apps/web/` at this time.
 
 ## 2. Target System
 
