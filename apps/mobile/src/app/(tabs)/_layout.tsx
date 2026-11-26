@@ -1,6 +1,6 @@
 import { Tabs } from "expo-router";
 import { tabs } from "@/constants/data";
-import { Pressable, View } from "react-native";
+import { Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNativeVariable } from "react-native-css/native";
 
@@ -10,11 +10,10 @@ const TabsLayout = () => {
   const mutedColor = useNativeVariable("--color-muted-foreground");
   const surfaceColor = useNativeVariable("--color-surface");
   const borderColor = useNativeVariable("--color-border");
-
   const TabIcon = ({ icon: Icon, color }: TabIconProps) => {
     return (
       <View className="tab-icon-wrap">
-        <Icon color={color} width={32} height={32} />
+        <Icon color={color} width={24} height={24} />
       </View>
     );
   };
@@ -28,9 +27,9 @@ const TabsLayout = () => {
         tabBarActiveTintColor: primaryColor,
         tabBarInactiveTintColor: mutedColor,
         tabBarStyle: {
-          height: 78 + insets.bottom,
-          paddingTop: 8,
-          paddingBottom: Math.max(insets.bottom, 8),
+          height: 70 + insets.bottom,
+          paddingTop: 2,
+          paddingBottom: Math.max(insets.bottom, 4),
           borderTopWidth: 1,
           backgroundColor: surfaceColor,
           borderTopColor: borderColor,
@@ -40,41 +39,19 @@ const TabsLayout = () => {
           paddingTop: 2,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
-          lineHeight: 16,
+          fontSize: 10,
+          lineHeight: 20,
           fontWeight: "700",
           marginTop: 0,
         },
       }}
     >
-      {tabs.map((tab) => (
+      {tabs.flatMap((tab) => [
         <Tabs.Screen
           key={tab.name}
           name={tab.name}
           options={{
             title: tab.title,
-            tabBarButton: ({
-              onPress,
-              onLongPress,
-              style,
-              children,
-              testID,
-              role,
-              "aria-label": accessibilityLabel,
-              "aria-selected": selected,
-            }) => (
-              <Pressable
-                onPress={onPress}
-                onLongPress={onLongPress}
-                style={style}
-                testID={testID}
-                role={role}
-                aria-label={accessibilityLabel}
-                aria-selected={selected}
-              >
-                {children}
-              </Pressable>
-            ),
             tabBarIcon: ({ focused, color }) => (
               <TabIcon
                 icon={focused ? tab.activeIcon ?? tab.icon : tab.icon}
@@ -82,8 +59,26 @@ const TabsLayout = () => {
               />
             ),
           }}
-        />
-      ))}
+        />,
+        ...(tab.name === "Categories"
+          ? [
+              <Tabs.Screen
+                key="Add"
+                name="Add"
+                options={{
+                  title: "",
+                  tabBarLabel: "",
+                  tabBarAccessibilityLabel: "Add transaction",
+                  tabBarIcon: () => (
+                    <View className="tab-add-button">
+                      <Text className="tab-add-icon">+</Text>
+                    </View>
+                  ),
+                }}
+              />,
+            ]
+          : []),
+      ])}
     </Tabs>
   );
 };

@@ -27,11 +27,11 @@ Overlays
   account-form           Bottom sheet                       Tier B
 ```
 
-Current routes are Dashboard (`index`), Categories, Accounts, and Settings. The tab metadata and icon mapping live in `apps/mobile/constants/data.ts` and `constants/icons.ts`; the bar uses theme variables for active/inactive tint, surface, and border, and includes the bottom safe-area inset. Navigation SVGs have filled and outlined variants. Settings is the current destination for theme controls and sign out. Profile remains the planned product destination; it has not replaced Settings in the route tree.
+Current destinations are Dashboard (`index`), Categories, Accounts, and Settings, with a center Add action slot. The tab metadata and icon mapping live in `apps/mobile/constants/data.ts` and `constants/icons.ts`; the bar uses theme variables for active/inactive tint, surface, and border, and includes the bottom safe-area inset. Navigation SVGs have filled and outlined variants. Settings is the current destination for theme controls and sign out. Profile remains the planned product destination; it has not replaced Settings in the route tree.
 
-The Dashboard, Categories, and Accounts routes currently render placeholder labels. The onboarding route was removed, and the Dashboard no longer links to it. The current bar does not yet include the planned floating Add action.
+The Dashboard, Categories, and Accounts routes currently render placeholder labels. The onboarding route was removed, and the Dashboard no longer links to it. The tab bar includes a raised center Add action that opens the Add transaction placeholder route.
 
-Add is a compact primary pill floating above the tab bar in the product design. It appears on Dashboard, Categories, and Category detail, and is hidden on Accounts and Profile. It is not a fifth tab. `[stated]` This control is not implemented in the current tab shell.
+Add is a circular primary action raised at the center of the tab bar. It stays visible across tab destinations and opens the Add transaction route. It is a floating action, not a fifth tab.
 
 ## 2. Sign in and account creation (F-001)
 

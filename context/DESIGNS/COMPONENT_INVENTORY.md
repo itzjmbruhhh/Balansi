@@ -134,7 +134,7 @@ In-sheet pane: the category and subcategory picker slides in inside the same she
 
 ## 14. Tab bar and Add pill
 
-**Current implementation:** React Navigation tab bar height is 78pt plus the device bottom inset, with 8pt top padding and bottom padding of at least 8pt. It uses the NativeWind `surface` and `border` theme variables in both themes. SVG icons render at 32pt in a 48pt wrapper; labels are always visible at 12pt, line height 16pt, weight 700. Active and inactive colors use the theme's `primary` and `muted-foreground` variables. The bar disables tab transition animation. These are implementation values, not the final visual spec.
+**Current implementation:** React Navigation tab bar height is 54pt plus the device bottom inset. Four destinations occupy four evenly sized slots, with the raised Add action in the fifth, center slot. The surface and border use theme variables; the Add fill and icon colors stay fixed across themes. SVG icons render at 24pt in a 32pt wrapper; labels are always visible at 10pt. Active and inactive colors use the theme's `primary` and `muted-foreground` variables.
 
 **Product direction:** tab bar is solid with no blur, an icon and always-visible label, and no pill behind the active item. The target inventory uses a 52pt bar plus safe area, a 22pt icon with a 44pt hit area, and `type-tab`; reconcile these dimensions when the tab bar receives its visual implementation pass.
 
@@ -142,7 +142,7 @@ Active: filled icon and label in `action-text`. Inactive: `text-tertiary`. No pi
 
 Current tabs: Dashboard, Categories, Accounts, Settings. Profile is the planned product destination; the Settings route currently owns theme controls and sign out.
 
-Add pill: primary button, compact, floating above the tab bar on the right, with `shadow-card`. Shown on Dashboard, Categories, and Category detail. Hidden on Accounts and Profile. `[stated]`
+Add action: 58pt circular primary button raised at the center of the tab bar with a fixed dark plus icon and a theme-aware surface outline. It opens the Add transaction route. `[implemented]`
 
 ## 15. Tier B additions `[proposed]`, approved at low fidelity
 
