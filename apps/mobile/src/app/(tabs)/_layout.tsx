@@ -14,7 +14,7 @@ const TabsLayout = () => {
   const TabIcon = ({ icon: Icon, color }: TabIconProps) => {
     return (
       <View className="tab-icon-wrap">
-        <Icon color={color} width={24} height={24} />
+        <Icon color={color} width={28} height={28} />
       </View>
     );
   };
@@ -28,10 +28,11 @@ const TabsLayout = () => {
         tabBarActiveTintColor: primaryColor,
         tabBarInactiveTintColor: mutedColor,
         tabBarStyle: {
-          height: 70 + insets.bottom,
+          height: 65 + insets.bottom,
           paddingTop: 2,
           paddingBottom: Math.max(insets.bottom, 4),
           borderTopWidth: 1,
+          paddingHorizontal: 4,
           backgroundColor: surfaceColor,
           borderTopColor: borderColor,
           borderColor,
