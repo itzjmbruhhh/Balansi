@@ -5,6 +5,7 @@
 > **Source anatomy:** `DESIGNS/DESIGN.md` sections 4 and 6. Balansi names and content overrides are in `DESIGN.md`.
 > **Tags:** `[stated]` owner-approved (Phase 3). `[proposed]` draft.
 > **Out of scope:** partner-brand rows, notification bell, milestone illustrations, projection charts, invest range switch (1D / 1W / 1Y), gradients.
+> **Implementation status:** the shared auth controls and initial tab bar exist. The other components below describe design targets unless explicitly labeled current; they are not evidence that the corresponding screens or finance flows are implemented.
 
 Variants listed here are the ones the reference already defines, plus the Tier B additions in section 15. No extra visual styles.
 
@@ -39,7 +40,7 @@ Height 52pt. Fill `surface`. Radius `radius-md`. No border at rest. Focus: `bord
 
 States: rest, focus, disabled.
 
-Auth variant: visible label above the input; 56pt height; `surface` fill; `radius-md`; `border` at rest, with an error border and message when validation fails. Email, username, password, verification-code, and password-reset fields use the same field component. Password visibility is masked by default.
+Implemented auth variant: visible label above the input; 56pt height; `surface` fill; rounded corners; a border at rest, with an error border and message when validation fails. Email, username, password, verification-code, and password-reset fields use the shared `AuthField` component. Password visibility is masked by default. This is the current implementation rather than the proposed generic field behavior above.
 
 ## 4. Choice group
 
@@ -133,7 +134,7 @@ In-sheet pane: the category and subcategory picker slides in inside the same she
 
 ## 14. Tab bar and Add pill
 
-**Current implementation:** React Navigation tab bar height is 78pt plus the device bottom inset, with 8pt top padding and bottom padding of at least 8pt. It uses the NativeWind `surface` and `border` theme variables in both themes. SVG icons render at 32pt in a 48pt wrapper; labels are always visible at 12pt, line height 16pt, weight 700. Active and inactive colors use the theme's `primary` and `muted-foreground` variables. The bar disables tab transition animation. These are implementation values, not the final visual spec.
+**Current implementation:** React Navigation tab bar height is 70pt plus the device bottom inset. Four destinations occupy four evenly sized slots, with the raised Add action in the fifth, center slot. The Add action has a 70pt circular touch target; while held, it scales to 0.98 and changes to `action-pressed` over 80ms, then eases back over 120ms. The tab surface and border adapt to the theme; the Add colors stay fixed across themes. SVG icons render at 24pt in a 32pt wrapper; labels are always visible at 10pt.
 
 **Product direction:** tab bar is solid with no blur, an icon and always-visible label, and no pill behind the active item. The target inventory uses a 52pt bar plus safe area, a 22pt icon with a 44pt hit area, and `type-tab`; reconcile these dimensions when the tab bar receives its visual implementation pass.
 
@@ -141,7 +142,7 @@ Active: filled icon and label in `action-text`. Inactive: `text-tertiary`. No pi
 
 Current tabs: Dashboard, Categories, Accounts, Settings. Profile is the planned product destination; the Settings route currently owns theme controls and sign out.
 
-Add pill: primary button, compact, floating above the tab bar on the right, with `shadow-card`. Shown on Dashboard, Categories, and Category detail. Hidden on Accounts and Profile. `[stated]`
+Add action: 58pt circular primary button raised at the center of the tab bar with a fixed dark plus icon and a theme-aware surface outline. It opens the Add transaction route. `[implemented]`
 
 ## 15. Tier B additions `[proposed]`, approved at low fidelity
 

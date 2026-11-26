@@ -3,6 +3,7 @@ import { tabs } from "@/constants/data";
 import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNativeVariable } from "react-native-css/native";
+import AddTabBarButton from "../../components/navigation/AddTabBarButton";
 
 const TabsLayout = () => {
   const insets = useSafeAreaInsets();
@@ -10,11 +11,10 @@ const TabsLayout = () => {
   const mutedColor = useNativeVariable("--color-muted-foreground");
   const surfaceColor = useNativeVariable("--color-surface");
   const borderColor = useNativeVariable("--color-border");
-
   const TabIcon = ({ icon: Icon, color }: TabIconProps) => {
     return (
       <View className="tab-icon-wrap">
-        <Icon color={color} width={32} height={32} />
+        <Icon color={color} width={28} height={28} />
       </View>
     );
   };
@@ -28,10 +28,11 @@ const TabsLayout = () => {
         tabBarActiveTintColor: primaryColor,
         tabBarInactiveTintColor: mutedColor,
         tabBarStyle: {
-          height: 78 + insets.bottom,
-          paddingTop: 8,
-          paddingBottom: Math.max(insets.bottom, 8),
+          height: 65 + insets.bottom,
+          paddingTop: 2,
+          paddingBottom: Math.max(insets.bottom, 4),
           borderTopWidth: 1,
+          paddingHorizontal: 4,
           backgroundColor: surfaceColor,
           borderTopColor: borderColor,
           borderColor,
@@ -40,14 +41,14 @@ const TabsLayout = () => {
           paddingTop: 2,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
-          lineHeight: 16,
+          fontSize: 10,
+          lineHeight: 20,
           fontWeight: "700",
           marginTop: 0,
         },
       }}
     >
-      {tabs.map((tab) => (
+      {tabs.flatMap((tab) => [
         <Tabs.Screen
           key={tab.name}
           name={tab.name}
@@ -82,8 +83,24 @@ const TabsLayout = () => {
               />
             ),
           }}
-        />
-      ))}
+        />,
+        ...(tab.name === "Categories"
+          ? [
+              <Tabs.Screen
+                key="Add"
+                name="Add"
+                options={{
+                  title: "",
+                  tabBarLabel: "",
+                  tabBarAccessibilityLabel: "Add transaction",
+                  tabBarButton: (buttonProps) => (
+                    <AddTabBarButton {...buttonProps} />
+                  ),
+                }}
+              />,
+            ]
+          : []),
+      ])}
     </Tabs>
   );
 };

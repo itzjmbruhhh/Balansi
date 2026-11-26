@@ -1,6 +1,6 @@
 # Balansi: Screen Specifications
 
-> **Scope:** sign-in and sign-up, dashboard, the analytics figures on that dashboard, the add-transaction sheet (Tier A, fully specified), and the Categories, Category detail, Accounts, and Profile screens (Tier B, low fidelity). The current app has an initial tab shell and placeholder destinations; specs below are product direction unless explicitly marked implemented.
+> **Scope:** sign-in and sign-up, dashboard, the analytics figures on that dashboard, the add-transaction sheet (Tier A, fully specified), and the Categories, Category detail, Accounts, and Profile screens (Tier B, low fidelity). Sign-in/sign-up are implemented; the signed-in finance screens remain placeholders. Apart from auth and current navigation facts, these specs are product direction, not implemented behavior.
 > **Tokens:** `DESIGN_TOKENS.md`. **Parts:** `COMPONENT_INVENTORY.md`. **Direction:** `DESIGN_BRIEF.md`.
 > **Tags:** `[stated]` from `PRD.md` or approved by the owner in Phase 3. `[proposed]` my draft, not yet approved.
 > **Out of scope:** yearly view, debts, AI, edit and delete.
@@ -27,15 +27,15 @@ Overlays
   account-form           Bottom sheet                       Tier B
 ```
 
-Current routes are Dashboard (`index`), Categories, Accounts, and Settings. The tab metadata and icon mapping live in `apps/mobile/constants/data.ts` and `constants/icons.ts`; the bar uses theme variables for active/inactive tint, surface, and border, and includes the bottom safe-area inset. Navigation SVGs have filled and outlined variants. Settings is the current destination for theme controls and sign out. Profile remains the planned product destination; it has not replaced Settings in the route tree.
+Current destinations are Dashboard (`index`), Categories, Accounts, and Settings, with a center Add action slot. The tab metadata and icon mapping live in `apps/mobile/constants/data.ts` and `constants/icons.ts`; the bar uses theme variables for active/inactive tint, surface, and border, and includes the bottom safe-area inset. Navigation SVGs have filled and outlined variants. Settings is the current destination for theme controls and sign out. Profile remains the planned product destination; it has not replaced Settings in the route tree.
 
-The Dashboard, Categories, and Accounts routes currently render placeholder labels. The onboarding route was removed, and the Dashboard no longer links to it. The current bar does not yet include the planned floating Add action.
+The Dashboard, Categories, and Accounts routes currently render placeholder labels. The onboarding route was removed, and the Dashboard no longer links to it. The tab bar includes a raised center Add action that opens the Add transaction placeholder route.
 
-Add is a compact primary pill floating above the tab bar in the product design. It appears on Dashboard, Categories, and Category detail, and is hidden on Accounts and Profile. It is not a fifth tab. `[stated]` This control is not implemented in the current tab shell.
+Add is a circular primary action raised at the center of the tab bar. It stays visible across tab destinations and opens the Add transaction route. It is a floating action, not a fifth tab.
 
 ## 2. Sign in and account creation (F-001)
 
-**Implemented.** Balansi owns the native UI and flow logic. Clerk provides identity, session, verification, and password-reset services. The screens use NativeWind and shared controls in `apps/mobile/src/components/auth/AuthUI.tsx`.
+**Implemented.** Balansi owns the native UI and flow logic. Clerk provides identity, session, verification, and password-reset services. The screens use NativeWind and shared controls in `apps/mobile/src/components/auth/AuthUI.tsx`. See `AUTH_SCREEN_SPECIFICATIONS.md` for the implemented flow summary; it does not define an additional Welcome or OAuth flow.
 
 **Sign-up flow.** Collect email, username, and password twice. Username is required and validated as 4–64 characters with no spaces; Clerk enforces uniqueness and instance-specific character rules. Create the account, send an email verification code, verify it, then activate the session and route to `(tabs)`. Users can resend the code or return to edit their details.
 
@@ -133,13 +133,13 @@ Proposed additions: subcategory, a month control instead of a calendar, an optio
 
 ## 6. Tier B screens (low fidelity) `[stated]`
 
-These exist so no tab points at nothing. They are blueprints only. Detailed visual passes come later.
+These are blueprints for future destinations; the current signed-in routes still render placeholders. Detailed visual passes come later.
 
 - **Categories.** Title and month control. One category row per category with the month's actual and expected totals and the share bar. Tap opens Category detail. The Add pill is visible.
 - **Category detail.** Header with the category name, the month total, and the month control. Below it, the transaction rows for that month, newest first, with a paginated list. Rows are not pressable. The Add pill is visible. Empty: "No [category] transactions this month."
 - **Accounts.** Account rows (name, purpose, balance) and a total. An "Add account" primary button opens the account form sheet. Balances are entered by hand. Empty: "No accounts yet. Add one to see what you hold."
 - **Account form sheet.** Name, kind (bank or wallet), purpose, balance. Primary button "Save account".
-- **Profile.** The signed-in email and a sign out text button.
+- **Profile.** The planned profile destination shows the signed-in email and sign-out action; Settings currently owns sign-out.
 
 ## 7. Still open
 

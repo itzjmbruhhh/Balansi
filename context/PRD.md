@@ -2,7 +2,7 @@
 
 > **Purpose:** what Balansi does, for whom, and how we know a feature is done.
 > **Not here:** how it is built (`RULES.md`, `ARCHITECTURE.md`), data model (`SCHEMA.md`), stack rationale (`RECOMMENDED.md`).
-> **Status legend:** `MVP` build first, `LATER` planned, `IDEA` not committed, `DROPPED` decided against, `TBD` needs a decision.
+> **Status legend:** `MVP` is planned for the first product release, not a claim that the feature is implemented; `LATER` planned after the MVP, `IDEA` not committed, `DROPPED` decided against, `TBD` needs a decision.
 > **Tags:** `[stated]` the owner said or confirmed it. `[proposed]` my draft, awaiting confirmation. `TODO` undecided; do not treat as a requirement.
 > **Maintenance:** stable IDs (`F-xxx`), never renumbered. Edit one feature at a time. Keep under ~200 lines.
 
@@ -21,11 +21,13 @@
 
 Login, then Dashboard (actual, expected, and past expenses), then a screen per expense category, then manual expense input.
 
+**Implementation snapshot:** the Expo app currently implements the Clerk sign-in/sign-up flows, route guard, and a signed-in tab shell. Dashboard, Categories, and Accounts are placeholders; transaction entry, finance data, and reporting are not implemented. The primary flow above describes the intended product, not the current app behavior. See `ARCHITECTURE.md` for the implementation boundary.
+
 ## 3. Features
 
 | ID | Feature | Status | Notes |
 |---|---|---|---|
-| F-001 | Sign in and account creation | MVP | Custom email/password flow via Clerk; username required at sign-up, email verification, password reset, protected signed-in routes, and sign-out (`RULES.md` 7b) |
+| F-001 | Sign in and account creation | MVP | Implemented in the mobile app: custom email/password flow via Clerk; username required at sign-up, email verification, password reset, protected signed-in routes, sign-out, and supported email/phone/TOTP/backup-code verification (`RULES.md` 7b) |
 | F-002 | Accounts (bank accounts and wallets) | MVP | Name, balance, and purpose label; balance entered by hand |
 | F-003 | Main and sub categories | MVP | Two separate lists, for income and for expenses; defaults copied to each user at signup; editable |
 | F-004 | Add actual expense (manual) | MVP | Money already spent; add and remove |
@@ -144,7 +146,7 @@ Criteria come from what you stated; `[proposed]` items are my drafts.
 
 - Fully online. A connection is required. `[stated]`
 - Flexible, scalable, and performant. `[stated]` Measurable targets: TODO.
-- Use existing UI component libraries, similar to shadcn, for mobile. `[stated]` Library choice: TODO (a `RULES.md` item).
+- NativeWind is the current mobile styling system; the app currently uses custom components. A reusable mobile component-library decision remains TODO.
 - Free tiers only for now. (`RECOMMENDED.md`)
 
 ## 6. Open Questions

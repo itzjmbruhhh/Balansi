@@ -2,8 +2,8 @@
 
 > **Purpose:** colors, type, spacing, radii, borders, and shadows for the current scope.
 > **Source of values:** `DESIGNS/DESIGN.md`. **Role names:** `DESIGN.md`.
-> **Machine-readable copy:** `balansi-tokens.json` (Tokens Studio format, for Figma Variables). Keep the two in step.
 > **Authority:** after these variables exist in `apps/mobile/global.css`, the code wins (`DESIGN.md`).
+> **Implementation status:** `global.css` currently defines a subset of the semantic color and typography variables used by the app. Many component, chart, spacing, radius, border, motion, and shadow values below remain design tokens only; do not assume they are implemented.
 > **Phase 3 changes:** gradient removed. Chart tokens are named by purpose. Three text-contrast tokens added (`[proposed]`, pending a real contrast check).
 
 Names are roles. Reference hue names sit in the Notes column so the values stay traceable.
@@ -77,7 +77,7 @@ Balansi uses no gradient fills. The month summary card is a solid `brand` fill. 
 
 ## 2. Type
 
-Family: Nunito Sans. Money uses tabular figures. `[proposed]`
+Family: Nunito Sans. Money uses tabular figures. `[proposed]` The app does not currently bundle or load Nunito Sans font files, so rendered text uses the platform fallback until font loading is implemented.
 
 The reference face is a rounded geometric sans. Nunito Sans is the free stand-in named in `DESIGNS/DESIGN.md`. Font files are not in the app yet.
 
@@ -187,7 +187,7 @@ Shadows are warm and rare. Rows stay flat.
 |---|---|---|
 | `motion-donut` | 600ms ease-out, clockwise from 12 o'clock | Donut load. Center label fades at 400ms |
 | `motion-ticker` | 300ms ease-out | Hero, left over, and summary amounts when they change |
-| `motion-press` | scale 0.98, 80ms ease-out | Card and button press |
+| `motion-press` | scale 0.98, 80ms ease-out | Card and button press; the Add tab button also shifts from `action` to `action-pressed` while held |
 | `motion-tab` | 120ms color crossfade | Active tab |
 
 Respect the system reduce-motion setting. Haptics are undecided. Do not add them in the spec.

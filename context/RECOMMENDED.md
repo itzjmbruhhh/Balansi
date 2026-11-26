@@ -1,18 +1,16 @@
 # Personal Finance Tracker: Tech Stack Decision Guide (v2)
 
-A finance tracker with a **separate web app and mobile app**, built part-time, used personally first, possibly public later. This document explains the recommended stack, why it fits, how flexible it is, and what to start with.
+A mobile-first, online personal finance tracker for Philippine pesos. This document explains the intended stack and rationale; `PRD.md` and `RULES.md` define the current product direction and conventions.
 
 **Decisions already made in our discussions**
 
 - React everywhere (you have amateur React experience), in TypeScript
-- **Next.js for web, Expo (React Native) for mobile**, as two separate apps, built at different times
+- **Expo (React Native) for mobile first; Next.js for web later**, as separate apps built at different times
 - Relational database (PostgreSQL), because finance data is relational
-- One database, not two (a local SQLite cache can be added to mobile later)
+- One database, not two
 - Free tiers only for now
-- Phone and desktop use, so data must sync from day one
-- The two apps have mostly similar capabilities, but some features will exist on only one platform
-
-**Assumption:** I assume you build the **web app first**, then mobile. If you'd rather start with mobile, only the MVP order in section 9 changes.
+- Fully online; offline support is out of scope
+- The mobile app is the current platform; web is later
 
 ---
 
@@ -27,7 +25,7 @@ A finance tracker with a **separate web app and mobile app**, built part-time, u
 | API                  | Supabase auto-generated API (`supabase-js`) behind your own shared repository layer                                    |
 | Authentication       | Clerk (mobile sign-in; third-party auth provider for Supabase)                                                         |
 | File / Media Storage | Supabase Storage (receipts, CSV imports)                                                                               |
-| Hosting / Deployment | Web: Vercel (or Netlify / Cloudflare Pages). Mobile: Expo Go while developing, EAS Build later                         |
+| Hosting / Deployment | Mobile: Expo development workflow, EAS Build for release later. Web hosting is a later decision                         |
 | Testing              | Vitest (shared logic), React Testing Library (web), Playwright (web end-to-end), React Native Testing Library (mobile) |
 | DevOps / CI/CD       | GitHub + GitHub Actions, Supabase CLI for database migrations                                                          |
 | Other tools          | TanStack Query, React Hook Form + Zod, pnpm workspaces (monorepo), ESLint + Prettier                                   |
@@ -63,9 +61,9 @@ A finance tracker with a **separate web app and mobile app**, built part-time, u
 
 **Supabase (PostgreSQL + Storage + API) with Clerk authentication**
 
-- _What:_ A hosted Postgres database with file storage and an instant API. Clerk handles sign-in and identity and is configured as Supabase's third-party auth provider.
+- _What:_ A hosted Postgres database with file storage and an instant API. Clerk handles sign-in and identity; the intended setup configures it as Supabase's third-party auth provider.
 - _Why:_ Supabase provides the database and API; Clerk owns user identity. Supabase Auth is not the selected sign-in system.
-- _Where:_ The "back half" of both apps. Both use Clerk session tokens when the app integration is complete.
+- _Where:_ The data backend for the mobile app first, then web if built. Apps use Clerk session tokens when the integration is complete; do not create or rely on Supabase Auth user sessions.
 
 **Row Level Security (RLS)**
 
@@ -177,7 +175,7 @@ The target rule: **screens do not talk to Supabase directly.** They call shared 
 
 **Growing users and data:** Index `(user_id, date)` early, use database views or functions for monthly totals, and paginate transaction lists. If you outgrow the managed API, add a dedicated backend in front of the same database.
 
-**Architecture evolving over time:** Start as "web app + Supabase." Then add mobile. Later add Edge Functions, then a separate API service, then background workers. Each step is additive.
+**Architecture evolving over time:** Continue with the mobile app and Supabase. Add the web app after the mobile MVP if needed. Add Edge Functions, a separate API service, or background workers only when a real feature requires them.
 
 **Code reuse between web and mobile:** Roughly **50 to 70 percent** of the total code, because UI is split but the logic is shared.
 
@@ -233,12 +231,12 @@ finance-tracker/
 └── README.md
 ```
 
-Start with `apps/web`, `packages/core`, `packages/data`, and `supabase/`. Create `apps/mobile` when you're ready for it. Add other apps (admin, API service) only when needed.
+Current repository: `apps/mobile` is the only app; it contains the initial Clerk auth flow and tab shell. The planned `packages/core`, `packages/data`, and Supabase migrations are not implemented. Continue with mobile; add shared packages as data features require them, and create `apps/web` only when web becomes an active product target.
 
 ### How the pieces communicate
 
 - **Apps → shared packages:** Both apps import from `core` and `data` as normal packages.
-- **Data layer → Supabase:** Uses `supabase-js` over HTTPS. On web, the session lives in cookies (`@supabase/ssr`). On mobile, it lives in secure device storage. Hide this difference in an adapter inside `data`.
+- **Data layer → Supabase:** Uses `supabase-js` over HTTPS. Clerk owns sign-in sessions on each platform; the app passes a Clerk session token to Supabase. Do not model this as Supabase Auth sessions.
 - **Supabase → database:** RLS rules check the logged-in user on every query.
 - **Files:** Apps upload directly to Supabase Storage, and the database stores only the file path.
 - **External services (later):** Called from Edge Functions or a backend, never directly from the apps when API keys are involved.
@@ -257,8 +255,8 @@ Start with `apps/web`, `packages/core`, `packages/data`, and `supabase/`. Create
 
 | Factor                    | Assessment                                                                                                                                                               |
 | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Ease of learning          | Moderate. New: Next.js (App Router), Supabase, RLS, and Expo later. You already have React basics and SQL. Building web first means learning one new platform at a time. |
-| Development speed         | High for the MVP, since there's no backend to write. Slower once both UIs exist, because screens are written twice.                                                      |
+| Ease of learning          | Moderate. The current work is Expo/React Native, Clerk, Supabase, and RLS; Next.js is deferred until web work begins. |
+| Development speed         | High for the mobile MVP, since there is no custom backend to write. A second UI will add work if web is built later. |
 | Documentation / community | Excellent for React, Next.js, Expo, and Supabase.                                                                                                                        |
 | Debugging                 | Good. Browser DevTools on web, Expo dev tools on mobile, Supabase logs and SQL editor. RLS bugs ("why is my query empty?") are the most common stumbling block.          |
 | Testing                   | Shared logic is easy to test once. Web UI testing is smooth. Mobile UI testing needs more setup.                                                                         |
@@ -274,7 +272,7 @@ Start with `apps/web`, `packages/core`, `packages/data`, and `supabase/`. Create
 | ------------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | Real-time features       | Yes              | Supabase Realtime (live updates across devices)                                                                            |
 | Notifications            | Yes              | Expo Notifications for mobile push, web push or email for web, scheduled by Edge Functions                                 |
-| Offline functionality    | Yes, with effort | Mobile: `expo-sqlite` cache. Web: service worker/PWA. Do it after the core works.                                          |
+| Offline functionality    | No, out of scope | The PRD defines Balansi as fully online and marks offline use as dropped. Revisit only if the product decision changes.   |
 | Background jobs          | Yes              | Supabase scheduled functions (`pg_cron`) and Edge Functions; later a worker service                                        |
 | File uploads             | Yes              | Supabase Storage, included                                                                                                 |
 | Payments                 | Yes              | Stripe or similar, via Edge Functions or a backend. Never handle card data yourself.                                       |
@@ -291,13 +289,13 @@ Start with `apps/web`, `packages/core`, `packages/data`, and `supabase/`. Create
 | Layer          | Recommended                                    | Purpose                             | Pros                                   | Cons                                | Alternatives                      |
 | -------------- | ---------------------------------------------- | ----------------------------------- | -------------------------------------- | ----------------------------------- | --------------------------------- |
 | Frontend / Web | Next.js + Tailwind + shadcn/ui                 | Web UI                              | Polished, in-demand, still React       | Heavier than needed, learning curve | Vite + React, Remix, Nuxt         |
-| Mobile         | Expo (React Native)                            | iOS and Android app                 | Native feel from React skills, Expo Go | Can't reuse web components          | Flutter, Capacitor, native        |
+| Mobile         | Expo (React Native)                            | First app for iOS and Android       | Native feel from React skills         | Can't reuse web components          | Flutter, Capacitor, native        |
 | Backend        | None at first (Supabase), later Edge Functions | Server-side logic                   | Almost no code to maintain             | Complex logic needs a plan          | NestJS, Fastify, FastAPI          |
 | Database       | PostgreSQL (Supabase)                          | Store users, accounts, transactions | Relational integrity, SQL reports      | Pausing on free tier, weak offline  | Firebase, Neon, PocketBase        |
 | API            | Supabase API via shared repository layer       | Connect apps to data                | Auto-generated, typed, swappable       | Tied to Supabase unless wrapped     | Custom REST/GraphQL API           |
 | Authentication | Clerk, with Supabase third-party auth         | Login and user identity             | RLS can use verified Clerk JWT claims  | Requires token and RLS configuration | Supabase Auth, Firebase Auth, Better Auth |
 | File Storage   | Supabase Storage                               | Receipts, imports                   | Included, access rules                 | Free storage cap                    | Cloudflare R2, S3                 |
-| Hosting        | Vercel (web), EAS (mobile later)               | Serve and ship the apps             | Free tier, auto-deploy                 | Vercel Hobby is non-commercial      | Netlify, Cloudflare Pages         |
+| Hosting        | EAS for mobile releases; web host later        | Serve and ship the apps             | Managed build and deploy options       | Service limits and terms can change | Vercel, Netlify, Cloudflare Pages |
 | Shared code    | pnpm workspaces: `core` + `data`               | Reuse logic across apps             | One source of truth                    | Monorepo setup time                 | Separate repos, Nx, Turborepo     |
 | Data fetching  | TanStack Query                                 | Server state, caching               | Works on web and mobile                | Learning curve                      | SWR, Redux Toolkit                |
 | Forms          | React Hook Form + Zod                          | Validation                          | Shared schemas                         | Learning curve                      | Formik, Valibot                   |
@@ -310,12 +308,12 @@ Start with `apps/web`, `packages/core`, `packages/data`, and `supabase/`. Create
 
 ### Recommended stack
 
-**Next.js (web) + Expo (mobile) → shared `core` and `data` packages → Supabase (Postgres, Storage, API) with Clerk authentication**, in a pnpm monorepo, with TanStack Query, React Hook Form, Zod, Tailwind/shadcn/ui, and GitHub Actions.
+**Expo (mobile first) → Supabase (Postgres and API) with Clerk authentication**, in a pnpm workspace. The intended data boundaries are shared `core` and `data` packages when needed; TanStack Query, React Hook Form, and Zod remain recommendations rather than current dependencies. Next.js web is a later platform.
 
 ### Why this fits your app
 
 - Matches your skills: React you already partly know, SQL you already know.
-- Separate apps let each platform have the UI it deserves, and fit your plan to build them at different times with somewhat different features.
+- Separate apps let each platform have the UI it deserves; mobile is built first and web can follow later.
 - The shared packages mean the hard parts (data rules, validation, money logic) are written once.
 - Relational data suits finance, and standard Postgres keeps you from being locked in.
 - Everything on the list has a usable free tier at personal scale.
@@ -325,7 +323,7 @@ Start with `apps/web`, `packages/core`, `packages/data`, and `supabase/`. Create
 
 - **A custom backend server:** not needed for the MVP.
 - **Firebase alongside Supabase:** one database, one auth system.
-- **Building both apps at once:** finish web first, then mobile.
+- **Building both apps at once:** complete the mobile MVP before starting the later web app.
 - **Turborepo/Nx, microservices, Kubernetes, GraphQL:** more complexity than a personal app needs.
 - **Offline sync:** valuable, but after the core features work.
 - **Bank-sync integrations and payments:** postpone until you decide to go public.
@@ -334,28 +332,25 @@ Start with `apps/web`, `packages/core`, `packages/data`, and `supabase/`. Create
 
 ### MVP: start with this
 
-1. Monorepo with `apps/web`, `packages/core`, `packages/data`, and `supabase/`
-2. Supabase project with migrations in your repo
-3. Tables: `accounts`, `categories`, `transactions`, each with RLS
-4. Email login on the web app
-5. Screens: sign in, add transaction, transaction list, monthly total by category
-6. Repository layer in `data` and Zod schemas in `core` from the start, with tests for the money and total calculations
-7. Deploy the web app to Vercel
-8. GitHub Actions running lint and tests
+1. Continue the existing `apps/mobile` Expo app and Clerk authentication flow.
+2. Before implementing finance data features, add Supabase migrations and verify Clerk token forwarding and RLS.
+3. Implement and test the schema and user-isolation invariants in `SCHEMA.md`.
+4. Add shared `core`/`data` packages when needed for domain logic and data access; keep screens out of direct Supabase queries.
+5. Build the account, category, transaction, and monthly-summary features in the mobile app.
+6. Add tests for money calculations, repository behavior, and relevant mobile flows; keep GitHub Actions checks passing.
 
 ### Add later, as the app grows
 
-- Mobile app (`apps/mobile`) reusing `core` and `data`
+- Web app (`apps/web`) after the mobile MVP, reusing shared logic where appropriate
 - Budgets, recurring transactions, and charts
 - CSV import of bank statements, with receipt uploads
-- Offline cache on mobile with `expo-sqlite`
 - Push notifications and scheduled jobs
 - Edge Functions, or a dedicated API service if logic grows
 - AI-assisted categorization
-- EAS Build and app store release if you go public
+- EAS Build and app store release when ready to publish
 - Admin dashboard, analytics, and desktop wrapper
 - Paid hosting tiers when real users arrive
 
 ### Suggested first step
 
-Draft the database schema (accounts, categories, transactions) and its RLS policies before writing any UI. Both apps build on it.
+Implement the first Supabase migrations and verify Clerk-backed RLS before connecting finance screens to persisted data. `SCHEMA.md` is a draft, not an existing database schema.

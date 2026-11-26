@@ -133,6 +133,9 @@
   --color-muted-foreground: var(--palette-neutral-500);
 
   --color-border: var(--palette-neutral-300);
+  --color-tab-add: var(--palette-green-400);
+  --color-tab-add-pressed: var(--palette-green-600);
+  --color-tab-add-icon: var(--palette-forest-900);
 }
 
 /* Dark semantic theme */
@@ -165,10 +168,30 @@
   --color-muted-foreground: var(--color-muted-foreground);
 
   --color-border: var(--color-border);
+  --color-tab-add: var(--color-tab-add);
+  --color-tab-add-pressed: var(--color-tab-add-pressed);
+  --color-tab-add-icon: var(--color-tab-add-icon);
 }
 
 @layer components {
+  /* Tab icon styles */
   .tab-icon-wrap {
-    @apply size-12 items-center justify-center;
+    @apply size-8 items-center justify-center;
+  }
+
+  .tab-add-button {
+    @apply size-[4.375rem] items-center justify-center rounded-full border-[0.1875rem] border-surface bg-tab-add;
+  }
+
+  .tab-add-touch-target {
+    @apply size-[4.375rem] items-center justify-center rounded-full;
+  }
+
+  .tab-add-hitbox-position {
+    @apply absolute -top-8 right-0 left-0 items-center;
+  }
+
+  .tab-add-icon {
+    @apply text-tab-add-icon text-[3rem] leading-[2.5rem] font-medium;
   }
 }
