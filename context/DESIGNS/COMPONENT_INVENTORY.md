@@ -134,7 +134,7 @@ In-sheet pane: the category and subcategory picker slides in inside the same she
 
 ## 14. Tab bar and Add pill
 
-**Current implementation:** React Navigation tab bar height is 54pt plus the device bottom inset. Four destinations occupy four evenly sized slots, with the raised Add action in the fifth, center slot. The surface and border use theme variables; the Add fill and icon colors stay fixed across themes. SVG icons render at 24pt in a 32pt wrapper; labels are always visible at 10pt. Active and inactive colors use the theme's `primary` and `muted-foreground` variables.
+**Current implementation:** React Navigation tab bar height is 70pt plus the device bottom inset. Four destinations occupy four evenly sized slots, with the raised Add action in the fifth, center slot. The Add action has a 70pt circular touch target; while held, it scales to 0.98 and changes to `action-pressed` over 80ms, then eases back over 120ms. The tab surface and border adapt to the theme; the Add colors stay fixed across themes. SVG icons render at 24pt in a 32pt wrapper; labels are always visible at 10pt.
 
 **Product direction:** tab bar is solid with no blur, an icon and always-visible label, and no pill behind the active item. The target inventory uses a 52pt bar plus safe area, a 22pt icon with a 44pt hit area, and `type-tab`; reconcile these dimensions when the tab bar receives its visual implementation pass.
 

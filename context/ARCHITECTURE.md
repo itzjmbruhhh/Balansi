@@ -15,6 +15,7 @@
 - The Settings tab exposes sign-out. The flow requires `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`; the app renders a setup message when it is missing.
 - The signed-in tab bar is generated from `apps/mobile/constants/data.ts` and uses SVG icon components mapped in `apps/mobile/constants/icons.ts`. Filled and outlined SVGs are transformed by `react-native-svg-transformer`; their configured source colors are replaced with `currentColor` so the tab tint can follow the active theme. The destinations are Dashboard (`index`), Categories, Accounts, and Settings, with a center Add action slot that opens the Add transaction route.
 - The tab bar reads primary, muted, surface, and border colors through `useNativeVariable`, and includes the device bottom safe-area inset. Dashboard, Categories, Accounts, and Add currently render placeholder content; Profile and finance flows are not implemented.
+- The raised Add tab control and its Reanimated press feedback live in `apps/mobile/src/components/navigation/AddTabBarButton.tsx`; `(tabs)/_layout.tsx` declares route order and delegates the control rendering to this component.
 - `apps/mobile/utils/supabase.ts` creates a Supabase client from `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_KEY`, with AsyncStorage configured for Supabase Auth session persistence. It does not forward Clerk session tokens, and there are no repositories, queries, or finance data mutations.
 - The root `.env.example` documents `EXPO_PUBLIC_SUPABASE_ANON_KEY`, while the client reads `EXPO_PUBLIC_SUPABASE_KEY`; reconcile the example and client before configuring Supabase access. Do not inspect local `.env` files.
 - The repository contains `supabase/config.toml`, but no migrations or `seed.sql`; the local config currently names `./seed.sql` as a seed path. Supabase and Clerk provider settings may also be configured externally; no app-level Clerk-to-Supabase integration is present.
@@ -45,7 +46,8 @@
 │           │   └── (tabs)/         # Dashboard, Categories, Accounts, Settings, and tab layout
 │           ├── components/
 │           │   ├── auth/           # Shared custom auth UI and validation
-│           │   └── layout/         # Shared screen container
+│           │   ├── layout/         # Shared screen container
+│           │   └── navigation/     # Tab bar controls
 │           ├── features/dashboard/ # Placeholder dashboard screen
 │           └── theme/              # Appearance hook
 ├── context/

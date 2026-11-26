@@ -187,7 +187,7 @@ Shadows are warm and rare. Rows stay flat.
 |---|---|---|
 | `motion-donut` | 600ms ease-out, clockwise from 12 o'clock | Donut load. Center label fades at 400ms |
 | `motion-ticker` | 300ms ease-out | Hero, left over, and summary amounts when they change |
-| `motion-press` | scale 0.98, 80ms ease-out | Card and button press |
+| `motion-press` | scale 0.98, 80ms ease-out | Card and button press; the Add tab button also shifts from `action` to `action-pressed` while held |
 | `motion-tab` | 120ms color crossfade | Active tab |
 
 Respect the system reduce-motion setting. Haptics are undecided. Do not add them in the spec.

@@ -1,8 +1,9 @@
 import { Tabs } from "expo-router";
 import { tabs } from "@/constants/data";
-import { Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNativeVariable } from "react-native-css/native";
+import AddTabBarButton from "../../components/navigation/AddTabBarButton";
 
 const TabsLayout = () => {
   const insets = useSafeAreaInsets();
@@ -52,6 +53,28 @@ const TabsLayout = () => {
           name={tab.name}
           options={{
             title: tab.title,
+            tabBarButton: ({
+              onPress,
+              onLongPress,
+              style,
+              children,
+              testID,
+              role,
+              "aria-label": accessibilityLabel,
+              "aria-selected": selected,
+            }) => (
+              <Pressable
+                onPress={onPress}
+                onLongPress={onLongPress}
+                style={style}
+                testID={testID}
+                role={role}
+                aria-label={accessibilityLabel}
+                aria-selected={selected}
+              >
+                {children}
+              </Pressable>
+            ),
             tabBarIcon: ({ focused, color }) => (
               <TabIcon
                 icon={focused ? tab.activeIcon ?? tab.icon : tab.icon}
@@ -69,10 +92,8 @@ const TabsLayout = () => {
                   title: "",
                   tabBarLabel: "",
                   tabBarAccessibilityLabel: "Add transaction",
-                  tabBarIcon: () => (
-                    <View className="tab-add-button">
-                      <Text className="tab-add-icon">+</Text>
-                    </View>
+                  tabBarButton: (buttonProps) => (
+                    <AddTabBarButton {...buttonProps} />
                   ),
                 }}
               />,
