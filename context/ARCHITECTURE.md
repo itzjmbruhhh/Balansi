@@ -2,7 +2,7 @@
 
 > **Purpose:** describe how Balansi's apps, shared packages, and services fit together.
 > **Not here:** product behavior (`PRD.md`), code conventions (`RULES.md`), data invariants (`SCHEMA.md`), or stack rationale (`RECOMMENDED.md`).
-> **Status:** Expo app has a Clerk client-side authentication flow, an initial signed-in tab shell, and an early Supabase client setup. Planned components below are not implemented unless marked current.
+> **Status:** The Expo app has a working Clerk client-side authentication flow, an initial signed-in tab shell, and an early Supabase client setup. Finance screens and data access are not implemented. Planned components below are not implemented unless marked current.
 > **Conflict order:** follow `RULES.md`. Record conflicts here rather than silently choosing a design.
 
 ---
@@ -14,11 +14,11 @@
 - `(auth)/SignIn.tsx` and `(auth)/SignUp.tsx` implement custom email/password screens. Sign-up requires a username and email verification; sign-in includes password reset and supported email, phone, TOTP, and backup-code verification steps. Shared NativeWind UI and validation live in `src/components/auth/AuthUI.tsx`.
 - The Settings tab exposes sign-out. The flow requires `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`; the app renders a setup message when it is missing.
 - The signed-in tab bar is generated from `apps/mobile/constants/data.ts` and uses SVG icon components mapped in `apps/mobile/constants/icons.ts`. Filled and outlined SVGs are transformed by `react-native-svg-transformer`; their configured source colors are replaced with `currentColor` so the tab tint can follow the active theme. The current destinations are Dashboard (`index`), Categories, Accounts, and Settings.
-- The tab bar reads primary, muted, surface, and border colors through `useNativeVariable`, and includes the device bottom safe-area inset. Its current implementation is an initial navigation shell; the Add action and product screens described in design specs are not implemented.
-- Authentication screens are wired, but application data access is not. `apps/mobile/utils/supabase.ts` still creates a Supabase client with AsyncStorage-backed Supabase Auth persistence and does not forward Clerk session tokens.
-- `apps/mobile/utils/supabase.ts` creates a Supabase client from `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_KEY`, with AsyncStorage configured for Supabase Auth session persistence. It does not yet provide Clerk session tokens to Supabase.
-- The Supabase project and Clerk third-party-auth provider are configured externally by the owner; repository migrations and application-level Clerk integration are not present yet.
-- The repository is a pnpm workspace. `packages/core`, `packages/data`, `supabase/`, and `apps/web` do not exist yet.
+- The tab bar reads primary, muted, surface, and border colors through `useNativeVariable`, and includes the device bottom safe-area inset. Dashboard, Categories, and Accounts currently render placeholders; the designed Add action, Profile destination, and finance screens are not implemented.
+- `apps/mobile/utils/supabase.ts` creates a Supabase client from `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_KEY`, with AsyncStorage configured for Supabase Auth session persistence. It does not forward Clerk session tokens, and there are no repositories, queries, or finance data mutations.
+- The root `.env.example` documents `EXPO_PUBLIC_SUPABASE_ANON_KEY`, while the client reads `EXPO_PUBLIC_SUPABASE_KEY`; reconcile the example and client before configuring Supabase access. Do not inspect local `.env` files.
+- The repository contains `supabase/config.toml`, but no migrations or `seed.sql`; the local config currently names `./seed.sql` as a seed path. Supabase and Clerk provider settings may also be configured externally; no app-level Clerk-to-Supabase integration is present.
+- The repository is a pnpm workspace. `packages/core`, `packages/data`, and `apps/web` are planned but absent. `supabase/` currently contains local CLI configuration only.
 - The product is mobile-first and fully online. Web is a later platform; offline support is out of scope (`PRD.md`).
 
 ### Current Repository Structure
@@ -43,7 +43,11 @@
 │           │   ├── _layout.tsx     # Clerk provider, auth gate, and root stack
 │           │   ├── (auth)/         # Custom sign-in and sign-up screens
 │           │   └── (tabs)/         # Dashboard, Categories, Accounts, Settings, and tab layout
-│           └── components/auth/    # Shared custom auth UI and validation
+│           ├── components/
+│           │   ├── auth/           # Shared custom auth UI and validation
+│           │   └── layout/         # Shared screen container
+│           ├── features/dashboard/ # Placeholder dashboard screen
+│           └── theme/              # Appearance hook
 ├── context/
 │   ├── ARCHITECTURE.md             # System structure and data flow
 │   ├── DESIGN.md                   # Balansi design direction
@@ -57,7 +61,7 @@
 └── pnpm-workspace.yaml             # Workspace package globs
 ```
 
-This tree lists the main source and project configuration files; it omits generated files, dependencies, and editor settings. `apps/mobile/assets/` contains Expo app images and SVG navigation icons. The repository has no root `README.md`, `packages/`, `supabase/` migrations, or `apps/web/` at this time.
+This tree lists the main source and project configuration files; it omits generated files, dependencies, and editor settings. `apps/mobile/assets/` contains Expo app images and SVG navigation icons. The repository has no root `README.md`, `packages/`, Supabase migrations, or `apps/web/` at this time.
 
 ## 2. Target System
 
@@ -85,22 +89,22 @@ The diagram describes the intended boundaries from `RULES.md`, `SCHEMA.md`, and 
 | `apps/web` | Web UI, if and when the web platform is started | Later; absent |
 | `packages/core` | Shared types, Zod validation, money/date helpers, and domain rules; no React or Supabase imports | Planned; absent |
 | `packages/data` | Supabase client, repositories, auth adapter, and TanStack Query hooks | Planned; absent |
-| Supabase | PostgreSQL, generated API, and RLS | Project configured externally; client utility exists; migrations absent |
+| Supabase | PostgreSQL, generated API, and RLS | Client utility exists; local Clerk provider disabled; migrations absent |
 | Clerk | User sign-in and identity; user records are not copied into Supabase | Expo provider, secure token cache, custom auth screens, route guard, and sign-out are implemented |
 
 ## 3. Request and Data Flow
 
-1. A user signs in through Clerk. The app obtains a Clerk session token for requests to Supabase.
+1. **Target flow, not implemented:** a user signs in through Clerk and the app obtains a Clerk session token for requests to Supabase.
 2. Screens use TanStack Query hooks from `packages/data`; screens do not call Supabase directly.
 3. Hooks call repository functions in `packages/data`. Repositories own Supabase queries and mutations.
 4. Supabase validates the session token and applies Postgres RLS to user-owned rows.
 5. Shared input validation and business rules live in `packages/core`; server responses and form input are validated at the appropriate boundary.
 
-This is the documented target, not the current runtime flow. The current client has no Clerk `accessToken` callback, and the app does not yet obtain or forward Clerk session tokens. Add that wiring before treating Supabase requests as Clerk-authenticated; follow current Clerk and Supabase integration documentation.
+Steps 1–5 describe the target architecture, not the current runtime flow. The current client has no Clerk `accessToken` callback, and the app does not obtain or forward Clerk session tokens. Add and verify that wiring before treating Supabase requests as Clerk-authenticated; follow current Clerk and Supabase integration documentation.
 
 ## 4. Identity and Data Security
 
-- Clerk is the identity provider. Supabase uses Clerk as a third-party auth provider; it does not use Supabase Auth user records (`RULES.md` 7b, `SCHEMA.md`).
+- Clerk is the identity provider. The target is to configure Supabase to accept Clerk as a third-party auth provider; the local `supabase/config.toml` currently has this provider disabled, and the app does not forward Clerk tokens. Supabase Auth user records are not the chosen identity model (`RULES.md` 7b, `SCHEMA.md`).
 - Database `user_id` values are text Clerk user IDs. RLS compares `user_id` to the `sub` claim in the verified JWT.
 - Every user-owned table must have RLS policies for reads and writes. Insert and update policies must check the new row's owner.
 - References between a user's transaction, category, and account must not cross user boundaries. The schema draft recommends composite `(user_id, id)` foreign keys.
@@ -111,7 +115,7 @@ See `SCHEMA.md` for the proposed entities and detailed data invariants.
 
 ## 5. Database Changes and Initialization
 
-- Schema changes are versioned in `supabase/migrations/`; do not make manual dashboard changes.
+- When database work begins, schema changes must be versioned in `supabase/migrations/`; do not make manual dashboard changes. The directory does not exist yet.
 - Until migrations exist, `SCHEMA.md` is the proposed model. Once migrations exist, they define the implemented columns and types.
 - Default categories are copied per user. The current documented direction is idempotent, race-safe seeding through a server-side Postgres function called via a repository on first app entry; it is not an auth trigger or webhook (`SCHEMA.md` section 5).
 - Monthly reports and totals are derived from transaction data; they are not stored as duplicated totals (`SCHEMA.md`).
@@ -128,7 +132,7 @@ Naming conventions for feature folders, repositories, hooks, and files are still
 - The app requires connectivity; no offline queue or sync behavior is planned (`PRD.md`).
 - Keep transaction lists paginated and index user/date access patterns as queries are implemented (`RULES.md`).
 - Use free service tiers only unless the owner approves a paid service (`RULES.md`).
-- Expo APIs change across SDK releases. Before changing Expo, EAS, or React Native APIs, follow `apps/mobile/AGENTS.md` and use docs matching the installed SDK major version.
+- Expo APIs change across SDK releases. Before changing Expo, EAS, or React Native APIs, use docs matching the installed SDK major version. There is currently no `apps/mobile/AGENTS.md`.
 
 ## 8. Unresolved Architecture Decisions
 

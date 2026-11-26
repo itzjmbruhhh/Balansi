@@ -5,6 +5,7 @@
 > **Source anatomy:** `DESIGNS/DESIGN.md` sections 4 and 6. Balansi names and content overrides are in `DESIGN.md`.
 > **Tags:** `[stated]` owner-approved (Phase 3). `[proposed]` draft.
 > **Out of scope:** partner-brand rows, notification bell, milestone illustrations, projection charts, invest range switch (1D / 1W / 1Y), gradients.
+> **Implementation status:** the shared auth controls and initial tab bar exist. The other components below describe design targets unless explicitly labeled current; they are not evidence that the corresponding screens or finance flows are implemented.
 
 Variants listed here are the ones the reference already defines, plus the Tier B additions in section 15. No extra visual styles.
 
@@ -39,7 +40,7 @@ Height 52pt. Fill `surface`. Radius `radius-md`. No border at rest. Focus: `bord
 
 States: rest, focus, disabled.
 
-Auth variant: visible label above the input; 56pt height; `surface` fill; `radius-md`; `border` at rest, with an error border and message when validation fails. Email, username, password, verification-code, and password-reset fields use the same field component. Password visibility is masked by default.
+Implemented auth variant: visible label above the input; 56pt height; `surface` fill; rounded corners; a border at rest, with an error border and message when validation fails. Email, username, password, verification-code, and password-reset fields use the shared `AuthField` component. Password visibility is masked by default. This is the current implementation rather than the proposed generic field behavior above.
 
 ## 4. Choice group
 

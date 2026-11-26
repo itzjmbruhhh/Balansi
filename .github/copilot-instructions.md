@@ -9,7 +9,8 @@ Balansi is a mobile-first, online personal finance tracker for Philippine pesos.
 - The only app is `apps/mobile`, built with Expo, React Native, TypeScript, Expo Router, NativeWind, and Clerk.
 - Clerk sign-in, username-based sign-up with email verification, password recovery, supported MFA steps, a signed-in route guard, and sign-out are implemented.
 - Dashboard, Categories, and Accounts are still placeholder screens; the Add transaction flow and finance data features are not implemented.
-- A Supabase client utility exists, but it does not forward Clerk session tokens. Supabase repositories, database migrations, and the planned `packages/core` and `packages/data` do not exist yet.
+- A Supabase client utility exists, but it does not forward Clerk session tokens; local Supabase config has Clerk third-party auth disabled. Supabase repositories and migrations, and the planned `packages/core` and `packages/data`, do not exist yet.
+- The root `.env.example` uses `EXPO_PUBLIC_SUPABASE_ANON_KEY`, but the client reads `EXPO_PUBLIC_SUPABASE_KEY`; treat this as an unresolved configuration mismatch.
 - Treat the documented shared data-layer boundaries as target architecture, not as existing code.
 
 ## Product and data invariants

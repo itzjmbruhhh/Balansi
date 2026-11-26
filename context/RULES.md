@@ -27,18 +27,18 @@
 
 ## 2. Project Layout `[RECOMMENDED]`
 
-- pnpm monorepo: `apps/mobile` (Expo, built first), `apps/web` (Next.js, later), `packages/core`, `packages/data`, `supabase/`.
+- The intended pnpm workspace is `apps/mobile` (Expo, current and first), `apps/web` (Next.js, later), `packages/core`, `packages/data`, and `supabase/`. Only `apps/mobile` and Supabase CLI configuration currently exist.
 - Mobile is the first platform. Do not create `apps/web` until it is needed. `[stated by owner]`
 
 ## 3. Non-Negotiables `[RECOMMENDED]`
 
-1. Apps never call Supabase directly. Only `packages/data` does, through repository functions.
-2. `packages/core` has no React and no Supabase imports.
+1. Target architecture: apps do not make Supabase data calls directly; `packages/data` owns them through repository functions. The current mobile app has a client utility but no data queries; `packages/data` does not exist yet.
+2. When created, `packages/core` has no React and no Supabase imports.
 3. Money is stored as integer minor units plus a currency code. Never floats.
-4. Every table has `user_id` and an RLS policy.
-5. A transfer between accounts is one database transaction.
-6. Schema changes go through migration files in `supabase/migrations/`, never manual dashboard edits.
-7. Secrets and third-party API keys stay server-side (Edge Functions or backend), never in the apps.
+4. Every future user-owned table has `user_id` and an RLS policy.
+5. If transfers are added, each transfer between accounts is one database transaction.
+6. When database schema work begins, changes go through migration files in `supabase/migrations/`, never manual dashboard edits.
+7. Secret keys and privileged third-party API keys stay server-side (Edge Functions or backend), never in the apps. Client-safe publishable/anon keys may use documented `EXPO_PUBLIC_` variables; never treat them as secrets or expose secret keys in the app.
 8. Free tiers only for now. Do not add paid services without asking.
 
 ## 4. TypeScript
@@ -46,7 +46,7 @@
 - Strict types, meaningful names. No `any` without a written reason. `[PREF]`
 - Prefer simplicity over cleverness. No abstraction until it is clearly needed. `[PREF]`
 - Avoid comments that restate the code. Code should be self-explanatory. `[PREF]`
-- Validate external input (forms, API responses) with Zod schemas from `core`. `[REC]`
+- Validate external input (forms, API responses) with Zod schemas from `core` when that package exists. `[REC]`
 
 ## 5. React and React Native `[PREF]`
 
@@ -74,10 +74,10 @@
 
 ## 6. Data Fetching and Forms
 
-- Server data comes from TanStack Query hooks in `packages/data`. Screens call hooks, not Supabase. `[RECOMMENDED]`
+- Target: server data comes from TanStack Query hooks in `packages/data`; screens call hooks, not Supabase. These packages and hooks do not exist yet.
 - Every fetch handles loading and error states in the UI. `[PREF]`
 - Do not add `useEffect` for fetching when a Query hook covers it. Use `useEffect` for fetching only when a real side effect requires it. `[PREF]`
-- Forms use React Hook Form with Zod schemas from `core`. `[RECOMMENDED]`
+- Target: forms use React Hook Form with Zod schemas from `core`. Neither package is currently installed/implemented as a shared data layer; the existing auth forms use local React state and Clerk.
 - Paginate transaction lists, and index `(user_id, date)`. `[RECOMMENDED]`
 
 ## 7. Mobile Styling
@@ -120,7 +120,7 @@ Free tiers only (section 3, rule 8). Check each service's current limits before 
 
 **EAS (builds and store publishing)**
 - Use EAS Build for development and release builds, and EAS Submit for the App Store and Play Store if the app is published.
-- Run the CLI as `npx eas-cli@latest <command>`, per `apps/mobile/AGENTS.md`.
+- Run the CLI as `npx eas-cli@latest <command>`.
 - Keep `development`, `preview`, and `production` profiles in `eas.json`, with a separate app ID for development builds. `[REC]`
 - `[TODO]` Store developer accounts and their fees. Check before publishing.
 
@@ -160,6 +160,7 @@ Free tiers only (section 3, rule 8). Check each service's current limits before 
 - Repository and hook logic in `data` is tested where it holds real rules. `[REC]`
 - Mobile UI uses React Native Testing Library, kept light. `[RECOMMENDED]`
 - A bug fix adds a test that fails before the fix, where practical. `[REC]`
+- Current validation scripts are `pnpm lint`, `pnpm typecheck`, `pnpm test`, and `pnpm check`; mobile currently defines lint and typecheck scripts only, with no test script or test suite.
 
 ## 10. Definition of Done
 

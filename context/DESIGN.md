@@ -2,6 +2,7 @@
 
 > **Purpose:** explain how the generated design documents in `DESIGNS/` relate to the product direction, what changed during adaptation, and which decisions remain open.
 > **Authority:** `PRD.md` and `RULES.md` define product behavior and implementation constraints. The documents in `DESIGNS/` are working design specifications, not replacements for them. Once implemented, `apps/mobile/global.css` is authoritative for token values.
+> **Implementation status:** the auth screens and initial tab shell exist. The dashboard, analytics, transaction sheet, and finance screens in the design specifications are not implemented; treat those specifications as design direction, not current UI behavior.
 
 ## Document map
 
@@ -12,17 +13,18 @@ The generated design files live in `context/DESIGNS/`:
 | [`DESIGNS/DESIGN_BRIEF.md`](DESIGNS/DESIGN_BRIEF.md) | Short design direction and the reasons Balansi borrows selected ideas from the Acorns reference. Start here for identity, mood, scope, and open decisions. |
 | [`DESIGNS/DESIGN_TOKENS.md`](DESIGNS/DESIGN_TOKENS.md) | Color, type, spacing, radius, border, shadow, motion, and money-format values, expressed as Balansi role tokens. |
 | [`DESIGNS/SCREEN_SPECIFICATIONS.md`](DESIGNS/SCREEN_SPECIFICATIONS.md) | Navigation, screen behavior and layout for sign-in and sign-up, the dashboard and its analytics, the add-transaction sheet, and the low-fidelity Tier B screens. |
+| [`DESIGNS/AUTH_SCREEN_SPECIFICATIONS.md`](DESIGNS/AUTH_SCREEN_SPECIFICATIONS.md) | Current implemented Clerk auth flow and its boundary from proposed auth design additions. |
 | [`DESIGNS/COMPONENT_INVENTORY.md`](DESIGNS/COMPONENT_INVENTORY.md) | Component anatomy, variants, states, and overlay types used by those screens. |
-| [`DESIGNS/balansi-tokens.json`](DESIGNS/balansi-tokens.json) | The same tokens as JSON in Tokens Studio format, for import into Figma Variables. Keep it in step with `DESIGN_TOKENS.md`. |
 | [`DESIGNS/DESIGN.md`](DESIGNS/DESIGN.md) | The original Acorns iOS design study. It is source material, not Balansi product direction. |
 
 `DESIGN-android.md`, `DESIGN-expo.md`, and `DESIGN-swiftui.md` are platform/reference notes in the same directory. They are not the generated screen specification set above.
+There is currently no Tokens Studio JSON export in the repository; `DESIGN_TOKENS.md` is the available token reference.
 
 ## What the adaptation preserves
 
 The design set studies Acorns' calm, rounded, number-led dashboard and reuses its purple and green palette, type scale, spacing, radii, and selected component patterns. The palette is an owner-stated starting point. Balansi uses no gradients.
 
-The mapping changes the meaning of the reference components:
+The mapping changes the meaning of the reference components. These are product design decisions, not claims about the current app:
 
 - Portfolio total becomes **Total owned**, the sum of account balances, with a "Balances as of" line.
 - The gain line becomes **Left over this month**, actual income minus actual expenses, in a "This month" section with the month control. Expected amounts are excluded.
@@ -61,7 +63,7 @@ The figures have distinct meanings and scopes. Total owned and the purpose donut
 1. Read `DESIGNS/DESIGN_BRIEF.md` for the adaptation and current scope.
 2. Use `DESIGNS/SCREEN_SPECIFICATIONS.md` for navigation, screen content, ordering, and states.
 3. Use `DESIGNS/COMPONENT_INVENTORY.md` for component-level treatment.
-4. Use `DESIGNS/DESIGN_TOKENS.md` or `balansi-tokens.json` for values, checking implementation tokens once they exist.
+4. Use `DESIGNS/DESIGN_TOKENS.md` for values, checking implementation tokens once they exist.
 5. Consult `DESIGNS/DESIGN.md` only to understand the Acorns reference behind a choice.
 
 Respect `[stated]`, `[proposed]`, and `TODO` labels. Product requirements and implementation rules take precedence where a generated design draft conflicts with them. The generated documents intentionally preserve unresolved choices rather than silently filling them in.

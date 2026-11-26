@@ -4,7 +4,7 @@
 > **Authority:** until migrations exist, this file is the design. Once `supabase/migrations/` exists, the migrations win for exact columns and types, and this file keeps only intent, invariants, and RLS rationale. Do not duplicate column lists after that.
 > **Status:** draft, all `[proposed]` unless tagged. Nothing here is built. Requirements live in `PRD.md`; rules in `RULES.md`.
 > **Diagram:** `balansi-erd.drawio` (open in draw.io). It is the visual copy of section 1. Keep the two in step.
-> **Auth:** Clerk, added to Supabase as a third-party auth provider (`RULES.md` 7b). Supabase Auth and `auth.users` are not used.
+> **Auth:** intended identity provider is Clerk, with Supabase configured as a third-party auth provider (`RULES.md` 7b). This integration is not implemented: the local Clerk provider is disabled in `supabase/config.toml`, and the app does not forward Clerk tokens. Supabase Auth and `auth.users` are not the selected identity model.
 > **Maintenance:** update only when intent or an invariant changes.
 
 ---
