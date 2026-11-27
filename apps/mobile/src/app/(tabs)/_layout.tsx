@@ -1,12 +1,10 @@
 import { Tabs } from "expo-router";
 import { tabs } from "@/constants/data";
 import { Pressable, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useNativeVariable } from "react-native-css/native";
 import AddTabBarButton from "../../components/navigation/AddTabBarButton";
 
 const TabsLayout = () => {
-  const insets = useSafeAreaInsets();
   const primaryColor = useNativeVariable("--color-primary");
   const mutedColor = useNativeVariable("--color-muted-foreground");
   const surfaceColor = useNativeVariable("--color-surface");
@@ -28,9 +26,13 @@ const TabsLayout = () => {
         tabBarActiveTintColor: primaryColor,
         tabBarInactiveTintColor: mutedColor,
         tabBarStyle: {
-          height: 65 + insets.bottom,
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: 65,
           paddingTop: 2,
-          paddingBottom: Math.max(insets.bottom, 4),
+          paddingBottom: 4,
           borderTopWidth: 1,
           paddingHorizontal: 4,
           backgroundColor: surfaceColor,
