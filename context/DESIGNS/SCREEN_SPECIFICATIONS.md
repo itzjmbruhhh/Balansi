@@ -27,7 +27,7 @@ Overlays
   account-form           Bottom sheet                       Tier B
 ```
 
-Current destinations are Dashboard (`index`), Categories, Accounts, and Settings, with a center Add action slot. The tab metadata and icon mapping live in `apps/mobile/constants/data.ts` and `constants/icons.ts`; the bar uses theme variables for active/inactive tint, surface, and border, and includes the bottom safe-area inset. Navigation SVGs have filled and outlined variants. Settings is the current destination for theme controls and sign out. Profile remains the planned product destination; it has not replaced Settings in the route tree.
+Current destinations are Dashboard (`index`), Categories, Accounts, and Settings, with a center Add action slot. The tab metadata and icon mapping live in `apps/mobile/constants/data.ts` and `constants/icons.ts`; the bar uses theme variables for active/inactive tint, surface, and border. It overlays tab screens at the bottom edge with a fixed 65pt height and does not reserve the device bottom inset, allowing the iOS Home indicator to overlap it. Screen content continues to respect safe areas. The operating system controls the indicator's appearance and opacity. Navigation SVGs have filled and outlined variants. Settings is the current destination for theme controls and sign out. Profile remains the planned product destination; it has not replaced Settings in the route tree.
 
 The Dashboard, Categories, and Accounts routes currently render placeholder labels. The onboarding route was removed, and the Dashboard no longer links to it. The tab bar includes a raised center Add action that opens the Add transaction placeholder route.
 
