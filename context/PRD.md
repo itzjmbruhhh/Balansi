@@ -21,7 +21,7 @@
 
 Login, then Dashboard (actual, expected, and past expenses), then a screen per expense category, then manual expense input.
 
-**Implementation snapshot:** the Expo app currently implements the Clerk sign-in/sign-up flows, route guard, and a signed-in tab shell. Dashboard, Categories, and Accounts are placeholders; transaction entry, finance data, and reporting are not implemented. The primary flow above describes the intended product, not the current app behavior. See `ARCHITECTURE.md` for the implementation boundary.
+**Implementation snapshot:** the Expo app currently implements the Clerk sign-in/sign-up flows, route guard, and a signed-in tab shell. The Dashboard tab route (`apps/mobile/src/app/(tabs)/index.tsx`), Categories, and Accounts are placeholders; there is no separate dashboard feature screen. Transaction entry, finance data, and reporting are not implemented. The primary flow above describes the intended product, not the current app behavior. See `ARCHITECTURE.md` for the implementation boundary.
 
 ## 3. Features
 

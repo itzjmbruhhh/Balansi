@@ -50,7 +50,7 @@ Light and dark both exist, and the app follows the system theme. `[stated]` Dark
 
 Tier A: sign-in and sign-up, the dashboard (including the analytics figures), and the add-transaction sheet. Tier B at low fidelity: Categories, Category detail, Accounts, Profile, and the account form sheet. Yearly view, debts, AI, and edit and delete are out of scope.
 
-**Implementation status:** sign-in and sign-up are implemented. The signed-in app has a tab shell, but Dashboard, Categories, and Accounts are placeholders; analytics, transaction entry, and the account form are design-only. Profile is a proposed destination; Settings is the current route for theme controls and sign-out.
+**Implementation status:** sign-in and sign-up are implemented. The signed-in app has a tab shell; its Dashboard route is `apps/mobile/src/app/(tabs)/index.tsx`, which currently renders placeholder content, with no separate dashboard feature screen. Categories and Accounts are also placeholders; analytics, transaction entry, and the account form are design-only. Profile is a proposed destination; Settings is the current route for theme controls and sign-out.
 
 The wordmark is the word "Balansi" in Nunito Sans. A logo and app icon are not designed yet. Do not invent a symbol. `[stated]`
 
