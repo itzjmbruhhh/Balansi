@@ -134,15 +134,15 @@ In-sheet pane: the category and subcategory picker slides in inside the same she
 
 ## 14. Tab bar and Add pill
 
-**Current implementation:** React Navigation tab bar height is 70pt plus the device bottom inset. Four destinations occupy four evenly sized slots, with the raised Add action in the fifth, center slot. The Add action has a 70pt circular touch target; while held, it scales to 0.98 and changes to `action-pressed` over 80ms, then eases back over 120ms. The tab surface and border adapt to the theme; the Add colors stay fixed across themes. SVG icons render at 24pt in a 32pt wrapper; labels are always visible at 10pt.
+**Current implementation:** React Navigation tab bar is absolutely positioned over tab screens at the bottom edge, with a fixed 65pt height, 4pt bottom padding, and 4pt horizontal padding. It does not include the device bottom inset, so the bar extends behind the iOS Home indicator. Screen content remains safe-area aware. iOS controls the indicator's opacity and appearance. Four destinations occupy four evenly sized slots, with the raised Add action in the fifth, center slot. The Add action is a 70pt circle and has a 70pt touch target; while held, it scales to 0.98 and changes to `action-pressed` over 80ms, then eases back over 120ms. The tab surface and border adapt to the theme; the Add colors stay fixed across themes. SVG icons render at 28pt in a 32pt wrapper; labels are always visible at 10pt.
 
 **Product direction:** tab bar is solid with no blur, an icon and always-visible label, and no pill behind the active item. The target inventory uses a 52pt bar plus safe area, a 22pt icon with a 44pt hit area, and `type-tab`; reconcile these dimensions when the tab bar receives its visual implementation pass.
 
 Active: filled icon and label in `action-text`. Inactive: `text-tertiary`. No pill behind the active item.
 
-Current tabs: Dashboard, Categories, Accounts, Settings. Profile is the planned product destination; the Settings route currently owns theme controls and sign out.
+Current destinations: Dashboard (`index`, tab label "Home"), Categories (tab label "Category"), Accounts, and Settings. Profile is the planned product destination; the Settings route currently owns theme controls and sign out.
 
-Add action: 58pt circular primary button raised at the center of the tab bar with a fixed dark plus icon and a theme-aware surface outline. It opens the Add transaction route. `[implemented]`
+Add action: 70pt circular primary button raised at the center of the tab bar with a fixed dark plus icon and a theme-aware surface outline. It opens the Add transaction route. `[implemented]`
 
 ## 15. Tier B additions `[proposed]`, approved at low fidelity
 
