@@ -2,7 +2,7 @@
     "name": "balansi",
     "private": true,
     "scripts": {
-        "mobile": "pnpm --filter mobile start",
+        "mobile": "pnpm --filter Balansi start",
         "db:start": "supabase start",
         "db:stop": "supabase stop",
         "db:status": "supabase status",
