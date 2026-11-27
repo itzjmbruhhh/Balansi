@@ -14,7 +14,7 @@
 - `(auth)/SignIn.tsx` and `(auth)/SignUp.tsx` implement custom email/password screens. Sign-up requires a username and email verification; sign-in includes password reset and supported email, phone, TOTP, and backup-code verification steps. Shared NativeWind UI and validation live in `src/components/auth/AuthUI.tsx`.
 - The Settings tab exposes sign-out. The flow requires `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY`; the app renders a setup message when it is missing.
 - The signed-in tab bar is generated from `apps/mobile/constants/data.ts` and uses SVG icon components mapped in `apps/mobile/constants/icons.ts`. Filled and outlined SVGs are transformed by `react-native-svg-transformer`; their configured source colors are replaced with `currentColor` so the tab tint can follow the active theme. The destinations are Dashboard (`index`), Categories, Accounts, and Settings, with a center Add action slot that opens the Add transaction route.
-- The tab bar reads primary, muted, surface, and border colors through `useNativeVariable`. It is absolutely positioned over tab screens at the bottom edge, with a fixed 65pt height and 4pt bottom padding; it does not reserve space for the device bottom inset, so the bar can extend behind the iOS Home indicator. Its appearance and opacity remain system controlled. Dashboard, Categories, Accounts, and Add currently render placeholder content; Profile and finance flows are not implemented.
+- The tab bar reads primary, muted, surface, and border colors through `useNativeVariable`. It is absolutely positioned over tab screens at the bottom edge, with a fixed 65pt height and 4pt bottom padding; it does not reserve space for the device bottom inset, so the bar can extend behind the iOS Home indicator. Its appearance and opacity remain system controlled. The Dashboard tab route (`src/app/(tabs)/index.tsx`), Categories, Accounts, and Add currently render placeholder content; there is no separate dashboard feature screen. Profile and finance flows are not implemented.
 - The raised Add tab control and its Reanimated press feedback live in `apps/mobile/src/components/navigation/AddTabBarButton.tsx`; `(tabs)/_layout.tsx` declares route order and delegates the control rendering to this component.
 - `apps/mobile/utils/supabase.ts` creates a Supabase client from `EXPO_PUBLIC_SUPABASE_URL` and `EXPO_PUBLIC_SUPABASE_KEY`, with AsyncStorage configured for Supabase Auth session persistence. It does not forward Clerk session tokens, and there are no repositories, queries, or finance data mutations.
 - The root `.env.example` documents `EXPO_PUBLIC_SUPABASE_ANON_KEY`, while the client reads `EXPO_PUBLIC_SUPABASE_KEY`; reconcile the example and client before configuring Supabase access. Do not inspect local `.env` files.
@@ -43,12 +43,11 @@
 │           ├── app/
 │           │   ├── _layout.tsx     # Clerk provider, auth gate, and root stack
 │           │   ├── (auth)/         # Custom sign-in and sign-up screens
-│           │   └── (tabs)/         # Dashboard, Categories, Accounts, Settings, and tab layout
+│           │   └── (tabs)/         # Dashboard (index.tsx), Categories, Accounts, Settings, Add, and tab layout
 │           ├── components/
 │           │   ├── auth/           # Shared custom auth UI and validation
 │           │   ├── layout/         # Shared screen container
 │           │   └── navigation/     # Tab bar controls
-│           ├── features/dashboard/ # Placeholder dashboard screen
 │           └── theme/              # Appearance hook
 ├── context/
 │   ├── ARCHITECTURE.md             # System structure and data flow

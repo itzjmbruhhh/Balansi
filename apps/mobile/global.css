@@ -50,76 +50,65 @@
   --dark-color-scrim: rgba(15, 9, 22, 0.55);
 
   /* Typography tokens */
+  --typography-font-family: "Nunito Sans", sans-serif;
   /* Tabular figures. 32 at 375 wide, 42 at 430 wide */
-  --typography-hero-font-family: "Nunito Sans", sans-serif;
-  --typography-hero-font-size: 38px;
+  --typography-hero-font-size: 2.375rem;
   --typography-hero-font-weight: 900;
-  --typography-hero-line-height: 39.9px;
-  --typography-hero-letter-spacing: -1px;
+  --typography-hero-line-height: 2.49375rem;
+  --typography-hero-letter-spacing: -0.0625rem;
   /* Tabular figures */
-  --typography-amount-lg-font-family: "Nunito Sans", sans-serif;
-  --typography-amount-lg-font-size: 28px;
+  --typography-amount-lg-font-size: 1.75rem;
   --typography-amount-lg-font-weight: 900;
-  --typography-amount-lg-line-height: 30.8px;
-  --typography-amount-lg-letter-spacing: -0.5px;
-  --typography-title-font-family: "Nunito Sans", sans-serif;
-  --typography-title-font-size: 22px;
+  --typography-amount-lg-line-height: 1.925rem;
+  --typography-amount-lg-letter-spacing: -0.03125rem;
+  --typography-title-font-size: 1.375rem;
   --typography-title-font-weight: 800;
-  --typography-title-line-height: 26.4px;
-  --typography-title-letter-spacing: -0.3px;
-  --typography-subtitle-font-family: "Nunito Sans", sans-serif;
-  --typography-subtitle-font-size: 18px;
+  --typography-title-line-height: 1.65rem;
+  --typography-title-letter-spacing: -0.01875rem;
+  --typography-subtitle-font-size: 1.125rem;
   --typography-subtitle-font-weight: 800;
-  --typography-subtitle-line-height: 22.5px;
-  --typography-subtitle-letter-spacing: -0.2px;
-  --typography-body-font-family: "Nunito Sans", sans-serif;
-  --typography-body-font-size: 16px;
+  --typography-subtitle-line-height: 1.40625rem;
+  --typography-subtitle-letter-spacing: -0.0125rem;
+  --typography-body-font-size: 1rem;
   --typography-body-font-weight: 400;
-  --typography-body-line-height: 23.2px;
-  --typography-body-letter-spacing: 0px;
-  --typography-row-font-family: "Nunito Sans", sans-serif;
-  --typography-row-font-size: 15px;
+  --typography-body-line-height: 1.45rem;
+  --typography-body-letter-spacing: 0;
+  --typography-row-font-size: 0.9375rem;
   --typography-row-font-weight: 700;
-  --typography-row-line-height: 19.5px;
-  --typography-row-letter-spacing: -0.1px;
+  --typography-row-line-height: 1.21875rem;
+  --typography-row-letter-spacing: -0.00625rem;
   /* Tabular figures */
-  --typography-money-font-family: "Nunito Sans", sans-serif;
-  --typography-money-font-size: 15px;
+  --typography-money-font-size: 0.9375rem;
   --typography-money-font-weight: 800;
-  --typography-money-line-height: 19.5px;
-  --typography-money-letter-spacing: -0.1px;
-  --typography-meta-font-family: "Nunito Sans", sans-serif;
-  --typography-meta-font-size: 13px;
+  --typography-money-line-height: 1.21875rem;
+  --typography-money-letter-spacing: -0.00625rem;
+  --typography-meta-font-size: 0.8125rem;
   --typography-meta-font-weight: 600;
-  --typography-meta-line-height: 17.55px;
-  --typography-meta-letter-spacing: 0px;
+  --typography-meta-line-height: 1.096875rem;
+  --typography-meta-letter-spacing: 0;
   /* Fixed size under system text scaling. No forced capitals */
-  --typography-label-font-family: "Nunito Sans", sans-serif;
-  --typography-label-font-size: 12px;
+  --typography-label-font-size: 0.75rem;
   --typography-label-font-weight: 700;
-  --typography-label-line-height: 15.6px;
-  --typography-label-letter-spacing: 0.4px;
-  --typography-button-font-family: "Nunito Sans", sans-serif;
-  --typography-button-font-size: 16px;
+  --typography-label-line-height: 0.975rem;
+  --typography-label-letter-spacing: 0.025rem;
+  --typography-button-font-size: 1rem;
   --typography-button-font-weight: 800;
-  --typography-button-line-height: 16px;
-  --typography-button-letter-spacing: 0px;
+  --typography-button-line-height: 1rem;
+  --typography-button-letter-spacing: 0;
   /* Fixed size under system text scaling */
-  --typography-tab-font-family: "Nunito Sans", sans-serif;
-  --typography-tab-font-size: 10px;
+  --typography-tab-font-size: 0.625rem;
   --typography-tab-font-weight: 700;
-  --typography-tab-line-height: 10px;
-  --typography-tab-letter-spacing: 0.1px;
-  --typography-delta-font-family: "Nunito Sans", sans-serif;
-  --typography-delta-font-size: 14px;
+  --typography-tab-line-height: 0.625rem;
+  --typography-tab-letter-spacing: 0.00625rem;
+  --typography-delta-font-size: 0.875rem;
   --typography-delta-font-weight: 700;
-  --typography-delta-line-height: 16.8px;
-  --typography-delta-letter-spacing: 0px;
+  --typography-delta-line-height: 1.05rem;
+  --typography-delta-letter-spacing: 0;
 
   /* Shadow tokens */
-  --effects-shadows-card: 0px 6px 18px -10px rgba(40, 18, 70, 0.16);
-  --effects-shadows-summary: 0px 10px 24px -12px rgba(74, 32, 106, 0.4);
-  --effects-shadows-sheet: 0px -8px 28px 0px rgba(20, 12, 30, 0.22);
+  --effects-shadows-card: 0 0.375rem 1.125rem -0.625rem rgba(40, 18, 70, 0.16);
+  --effects-shadows-summary: 0 0.625rem 1.5rem -0.75rem rgba(74, 32, 106, 0.4);
+  --effects-shadows-sheet: 0 -0.5rem 1.75rem 0 rgba(20, 12, 30, 0.22);
 
   /* Light semantic theme */
   --color-background: var(--palette-oak-50);
@@ -129,8 +118,8 @@
   --color-primary: var(--palette-green-400);
   --color-primary-pressed: var(--palette-green-600);
 
-  --color-foreground: var(--palette-neutral-900);
-  --color-muted-foreground: var(--palette-neutral-500);
+  --color-foreground: var(--palette-oak-900);
+  --color-muted-foreground: var(--palette-oak-500);
 
   --color-border: var(--palette-neutral-300);
   --color-tab-add: var(--palette-green-400);
@@ -157,6 +146,7 @@
 
 /* NativeWind Theme tokens */
 @theme {
+  /* Color tokens */
   --color-background: var(--color-background);
   --color-surface: var(--color-surface);
   --color-surface-secondary: var(--color-surface-secondary);
@@ -171,9 +161,31 @@
   --color-tab-add: var(--color-tab-add);
   --color-tab-add-pressed: var(--color-tab-add-pressed);
   --color-tab-add-icon: var(--color-tab-add-icon);
+
+  /* Typography tokens */
+  --font-hero: var(--typography-font-family);
+  --text-hero-size: var(--typography-hero-font-size);
+  --text-subtitle-size: var(--typography-subtitle-font-size);
 }
 
 @layer components {
+  /* Home Header Styles */
+  .home-header {
+    @apply flex-col justify-between;
+  }
+
+  .home-greeting-container {
+    @apply flex-row items-center justify-between mb-1;
+  }
+
+  .home-header-title {
+    @apply text-hero-size text-foreground font-[900];
+  }
+
+  .home-header-greeting {
+    @apply text-subtitle-size text-foreground font-[500];
+  }
+
   /* Tab icon styles */
   .tab-icon-wrap {
     @apply size-8 items-center justify-center;

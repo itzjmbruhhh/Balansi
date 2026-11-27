@@ -2,7 +2,7 @@
 
 > **Purpose:** explain how the generated design documents in `DESIGNS/` relate to the product direction, what changed during adaptation, and which decisions remain open.
 > **Authority:** `PRD.md` and `RULES.md` define product behavior and implementation constraints. The documents in `DESIGNS/` are working design specifications, not replacements for them. Once implemented, `apps/mobile/global.css` is authoritative for token values.
-> **Implementation status:** the auth screens and initial tab shell exist. The dashboard, analytics, transaction sheet, and finance screens in the design specifications are not implemented; treat those specifications as design direction, not current UI behavior.
+> **Implementation status:** the auth screens and initial tab shell exist. The Dashboard tab is `apps/mobile/src/app/(tabs)/index.tsx` and currently renders placeholder content; there is no separate dashboard feature screen. The dashboard design, analytics, transaction sheet, and finance screens in the specifications are not implemented; treat those specifications as design direction, not current UI behavior.
 
 ## Document map
 
