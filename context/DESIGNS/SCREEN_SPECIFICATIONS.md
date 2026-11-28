@@ -53,6 +53,8 @@ Add is a circular primary action raised at the center of the tab bar. It stays v
 
 **Job.** After sign-in, show what the accounts hold now, and this month's actual, expected, and past spending. `[stated]`
 
+**Greeting.** The header uses local device time: "Good Morning!" from 05:00 to 11:59 and "Good Afternoon!" from 12:00 to 17:59, each with the sun icon; "Good Evening!" from 18:00 to 04:59 uses the moon icon.
+
 **Two scopes.** "Now" figures do not change with the month, because balances have no history. "This month" figures follow the month control. `[stated]`
 
 **Regions, top to bottom.**
